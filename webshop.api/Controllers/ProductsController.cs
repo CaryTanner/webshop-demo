@@ -19,7 +19,9 @@ public class ProductsController : ControllerBase
         string? search = null,
         string? sortBy = null,
         bool? inStock = null,
-        [FromQuery] List<int>? categoryIds = null)
+        [FromQuery] List<int>? categoryIds = null,
+        int skip = 0,
+        int limit = 20)
     {
         var products = _context.Products
             .Include(p => p.Categories)
@@ -46,7 +48,8 @@ public class ProductsController : ControllerBase
             _ => products
         };
 
-        return await products.ToListAsync();
+        var paged = products.Skip(skip).Take(limit);
+        return await paged.ToListAsync();
     }
 
     // GET: api/products/5
