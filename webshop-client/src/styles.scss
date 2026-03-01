@@ -13,6 +13,29 @@ html {
       density: -3,
     )
   );
+
+  .mat-icon.success {
+    @include mat.icon-overrides(
+      (
+        color: theme-colors.$success-color,
+      )
+    );
+  }
+  .mat-icon.error {
+    @include mat.icon-overrides(
+      (
+        color: theme-colors.$error-color,
+      )
+    );
+  }
+
+  .mat-icon.warn {
+    @include mat.icon-overrides(
+      (
+        color: theme-colors.$warn-color,
+      )
+    );
+  }
 }
 
 body {
