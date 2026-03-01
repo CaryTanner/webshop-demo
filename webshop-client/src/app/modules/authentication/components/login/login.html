@@ -1,0 +1,36 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+  <mat-form-field class="login-field">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" type="email" required autocomplete="email" />
+    @if (loginForm.controls['email']?.hasError('required')) {
+      <mat-error>Email is required</mat-error>
+    }
+    @if (
+      loginForm.controls['email']?.hasError('email') &&
+      !loginForm.controls['email']?.hasError('required')
+    ) {
+      <mat-error>Enter a valid email</mat-error>
+    }
+    @if (loginForm.controls['email']?.hasError('loginFailed')) {
+      <mat-error>Invalid email or password</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field class="login-field">
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      formControlName="password"
+      type="password"
+      required
+      autocomplete="current-password"
+    />
+    @if (loginForm.controls['password']?.hasError('required')) {
+      <mat-error>Password is required</mat-error>
+    }
+  </mat-form-field>
+
+  <button matButton="filled" type="submit" [disabled]="!loginForm.valid || $loading()">
+    Login
+  </button>
+</form>

@@ -1,0 +1,5 @@
+<h2>Welcome back</h2>
+<p>Email: {{ $user()?.email }}</p>
+@if ($user()?.isAdmin) {
+  <p>You have admin privileges</p>
+}

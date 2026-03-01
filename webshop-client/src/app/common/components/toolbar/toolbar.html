@@ -1,0 +1,33 @@
+<div>
+  <button
+    type="button"
+    aria-label="Toggle side navigation"
+    matIconButton
+    (click)="toggleSideNav.emit()"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h4><a routerLink="/home" class="toolbar-title-link">Tech Hub</a></h4>
+</div>
+<div>
+  <button
+    type="button"
+    aria-label="Toggle shopping cart menu"
+    matIconButton
+    (click)="toggleCart.emit()"
+  >
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+  <button
+    type="button"
+    [attr.aria-label]="$isLoggedIn() ? 'Logout' : 'Login'"
+    matIconButton
+    (click)="toggleLogin.emit()"
+  >
+    @if ($isLoggedIn()) {
+      <mat-icon>logout</mat-icon>
+    } @else {
+      <mat-icon>login</mat-icon>
+    }
+  </button>
+</div>

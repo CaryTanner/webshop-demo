@@ -1,0 +1,52 @@
+@use 'theme-colors' as theme;
+@use '@angular/material' as mat;
+@mixin material-overrides() {
+  .mat-icon.success {
+    @include mat.icon-overrides(
+      (
+        color: theme.$success-color,
+      )
+    );
+  }
+  .mat-icon.error {
+    @include mat.icon-overrides(
+      (
+        color: theme.$error-color,
+      )
+    );
+  }
+
+  .mat-icon.warn {
+    @include mat.icon-overrides(
+      (
+        color: theme.$warn-color,
+      )
+    );
+  }
+  @include mat.sidenav-overrides(
+    (
+      container-background-color: theme.$light-bg,
+      container-shape: 0px,
+      container-width: 160px,
+      scrim-color: transparent,
+    )
+  );
+  @include mat.toolbar-overrides(
+    (
+      container-background-color: theme.$light-bg,
+    )
+  );
+  @include mat.button-overrides(
+    (
+      filled-container-shape: 4px,
+      outlined-container-shape: 4px,
+      protected-container-shape: 4px,
+    )
+  );
+
+  @include mat.list-overrides(
+    (
+      active-indicator-shape: 0px,
+    )
+  );
+}

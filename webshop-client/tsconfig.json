@@ -22,8 +22,8 @@
       "@common/*": [
         "src/app/common/*"
       ],
-      "@pipe/*": [
-        "src/app/common/pipes/*"
+      "@env/*": [
+        "environment"
       ]
     }
   },

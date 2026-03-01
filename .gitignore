@@ -1,0 +1,24 @@
+# Ignore build outputs and cache for .NET
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.user
+*.vspscc
+*.vssscc
+*.suo
+*.cache
+*.log
+/TestResults/
+/.vs/
+
+# Ignore local settings
+appsettings.Development.json
+appsettings.Local.json
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore node_modules for any JS/TS projects
+node_modules/

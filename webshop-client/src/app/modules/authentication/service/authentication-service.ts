@@ -1,0 +1,98 @@
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { LoginResponse, User } from '../authentication.interface';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, of, throwError } from 'rxjs';
+import { BASE_URL } from '@env/environment';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthenticationService {
+  private http = inject(HttpClient);
+  private _user = signal<User | null>(null);
+  public _isAdmin = computed(() => {
+    const user = this._user();
+    return user?.isAdmin || false;
+  });
+  public _isLoggedIn = computed(() => {
+    const user = this._user();
+    return !!user;
+  });
+
+  constructor() {
+    // will maintain state if user refreshes or returns to app with valid session
+    this.restoreSession();
+  }
+
+  isAdmin() {
+    return this._isAdmin;
+  }
+
+  isLoggedIn() {
+    return this._isLoggedIn;
+  }
+
+  restoreSession() {
+    const token = localStorage.getItem('token');
+    const expiresAt = localStorage.getItem('expires_at');
+    const userStr = localStorage.getItem('user');
+
+    if (token && expiresAt && userStr) {
+      const expiresAtDate = new Date(expiresAt);
+      if (expiresAtDate > new Date()) {
+        const userData = JSON.parse(userStr);
+        this._user.set({ email: userData.email, isAdmin: userData.isAdmin, id: userData.userId });
+      } else {
+        this.logout();
+      }
+    }
+  }
+
+  user() {
+    return this._user.asReadonly();
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expires_at');
+    localStorage.removeItem('user');
+    this._user.set(null);
+  }
+
+  login({ email, password }: { email: string; password: string }) {
+    return this.http.post<LoginResponse>(`${BASE_URL}/auth/login`, { email, password }).pipe(
+      map((resp: LoginResponse) => {
+        console.log('login response', resp);
+        if (!resp.token) {
+          throw new Error('Login failed');
+        }
+
+        localStorage.setItem('token', resp.token);
+        localStorage.setItem('expires_at', resp.expiresAt);
+        localStorage.setItem(
+          'user',
+          JSON.stringify({ email: resp.email, isAdmin: resp.isAdmin, userId: resp.userId }),
+        );
+
+        this._user.set({ email: resp.email, isAdmin: resp.isAdmin, id: resp.userId });
+
+        return of(true); // complete the observable with a success value, data access via signals
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+
+  testJwt() {
+    return this.http.get(`${BASE_URL}/auth/test-jwt`).pipe(
+      map((resp) => {
+        console.log('test JWT response', resp);
+        return of(true);
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+}

@@ -19,12 +19,15 @@ public class OrdersController : ControllerBase
         if (!User.Identity?.IsAuthenticated ?? true)
             return Unauthorized();
         var isAdmin = User.Claims.FirstOrDefault(c => c.Type == "isAdmin")?.Value;
+        IQueryable<Order> query = _context.Orders.Include(o => o.User).Include(o => o.Items);
         if (isAdmin != "True" && isAdmin != "true")
-            return Unauthorized();
-
-        var orders = await _context.Orders
-            .Include(o => o.User)
-            .Include(o => o.Items)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "nameidentifier")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized();
+            query = query.Where(o => o.UserId == userId);
+        }
+        var orders = await query
             .Select(o => new
             {
                 o.Id,

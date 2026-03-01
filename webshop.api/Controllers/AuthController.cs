@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -11,11 +12,13 @@ public class AuthController : ControllerBase
 {
     private readonly WebshopContext _context;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(WebshopContext context, IConfiguration configuration)
+    public AuthController(WebshopContext context, IConfiguration configuration, ILogger<AuthController> logger)
     {
         _context = context;
         _configuration = configuration;
+        _logger = logger;
     }
 
     [HttpPost("login")]
@@ -70,6 +73,26 @@ public class AuthController : ControllerBase
     {
         public required string Token { get; set; }
         public required DateTime ExpiresAt { get; set; }
+    }
+    [HttpGet("test-jwt")]
+    public IActionResult TestJwt()
+    {
+        if (!User.Identity?.IsAuthenticated ?? true)
+            return Unauthorized("JWT not present or invalid");
+
+        var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var email = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+        var isAdmin = User.Claims.FirstOrDefault(c => c.Type == "IsAdmin")?.Value;
+
+        _logger.LogInformation("TestJwt called. User info: userId={UserId}, email={Email}, isAdmin={IsAdmin}", userId, email, isAdmin);
+
+        return Ok(new
+        {
+            message = "JWT is valid and received!",
+            userId,
+            email,
+            isAdmin
+        });
     }
 }
 

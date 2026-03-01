@@ -1,40 +1,23 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
-@use './theme-colors' as theme-colors;
+@use 'theme-colors' as theme;
+@import '_mixin';
 
 html {
   @include mat.theme(
     (
       color: (
-        primary: theme-colors.$primary-palette,
-        tertiary: theme-colors.$tertiary-palette,
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette,
       ),
       typography: Roboto,
-      density: -3,
+      density: -2,
     )
   );
 
-  .mat-icon.success {
-    @include mat.icon-overrides(
-      (
-        color: theme-colors.$success-color,
-      )
-    );
-  }
-  .mat-icon.error {
-    @include mat.icon-overrides(
-      (
-        color: theme-colors.$error-color,
-      )
-    );
-  }
-
-  .mat-icon.warn {
-    @include mat.icon-overrides(
-      (
-        color: theme-colors.$warn-color,
-      )
-    );
+  @include material-overrides();
+  h1 {
+    margin-top: 0px;
   }
 }
 
