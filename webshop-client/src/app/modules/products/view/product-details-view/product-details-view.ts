@@ -42,6 +42,7 @@ export class ProductDetailsView {
   };
 
   addToCart(product: Product) {
+    console.log('TODO-- return to products i missin id')
     console.log('Adding to cart:', product);
   }
 }

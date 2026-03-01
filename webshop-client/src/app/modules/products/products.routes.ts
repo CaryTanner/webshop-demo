@@ -10,12 +10,17 @@ export const routes: Routes = [
     component: ProductsView,
   },
   {
-    path: 'products/:id',
-    component: ProductDetailsView,
-  },
-  {
-    path: 'products/manage/:id',
+    path: 'products/create',
     component: ProductForm,
     canActivate: [adminGuard],
+  },
+  {
+    path: 'products/edit/:id',
+    component: ProductForm,
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'products/:id',
+    component: ProductDetailsView,
   },
 ];

@@ -1,0 +1,22 @@
+.product-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 48%;
+  min-width: 200px;
+}
+
+button[type='submit'] {
+  align-self: flex-end;
+  margin-top: 16px;
+}
