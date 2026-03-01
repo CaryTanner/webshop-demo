@@ -1,1 +1,50 @@
-<p>product-details-view works!</p>
+<h1>Product Details</h1>
+@if (product; as p) {
+  <section class="product-details-container">
+    <mat-card class="product-card">
+      <div class="product-header">
+        <div class="product-svg">
+          <img [src]="p.svgType + '.svg'" [alt]="p.svgType + ' icon'" />
+        </div>
+        <div class="product-main-info">
+          <h2>{{ p.name }}</h2>
+          <div class="product-categories">
+            @if (p.categories?.length) {
+              <mat-chip-listbox>
+                @for (cat of p.categories; track cat) {
+                  <mat-chip>{{ cat.name }}</mat-chip>
+                }
+              </mat-chip-listbox>
+            }
+          </div>
+          <div class="product-price">
+            <span class="price">{{ p.price | currency }}</span>
+            <span
+              class="stock"
+              [ngClass]="{ 'in-stock': p.stock > 0, 'out-of-stock': p.stock === 0 }"
+            >
+              {{ p.stock > 0 ? p.stock + ' in stock' : 'Out of stock' }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="product-description">
+        <h2>Description</h2>
+        <p>{{ p.description || 'No description available.' }}</p>
+      </div>
+      <div class="product-actions">
+        <button
+          type="button"
+          matButton="filled"
+          color="primary"
+          (click)="addToCart(p)"
+          [disabled]="p.stock === 0"
+        >
+          <mat-icon>add_shopping_cart</mat-icon>
+          Add to Cart
+        </button>
+      </div>
+    </mat-card>
+  </section>
+}

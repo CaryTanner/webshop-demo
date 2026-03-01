@@ -208,6 +208,9 @@ $tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
 
 $success-color: map.get($_palettes, tertiary, 40);
 $error-color: map.get($_palettes, error, 50);
+$success-color: map.get($_palettes, tertiary, 40);
 $warn-color: orange;
 $light-bg: map.get($_palettes, primary, 95);
 $text-primary: map.get($_palettes, primary, 40);
+$text-secondary: map.get($_palettes, secondary, 40);
+$text-tertiary: map.get($_palettes, neutral, 30);

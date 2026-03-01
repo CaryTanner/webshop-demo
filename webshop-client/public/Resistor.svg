@@ -1,0 +1,8 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <!-- Classic resistor: zig-zag line between two terminals -->
+        <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <polyline points="6,12 7.5,9 9,15 10.5,9 12,15 13.5,9 15,15 16.5,12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="16.5" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+</svg>
