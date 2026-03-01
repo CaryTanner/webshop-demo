@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,6 +29,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class App {
   private breakpointObserver = inject(BreakpointObserver);
+  private router = inject(Router);
   public $isMobile = this.handleMobile();
 
   private authService = inject(AuthenticationService);
@@ -36,7 +37,6 @@ export class App {
   public $isLoggedIn = this.authService.isLoggedIn();
 
   handleMobile() {
-    console.log(' add styling');
     return toSignal(
       this.breakpointObserver.observe(Breakpoints.XSmall).pipe(
         map((result) => {
@@ -55,7 +55,9 @@ export class App {
     if (this.$isLoggedIn()) {
       this.authService.logout();
     } else {
-      console.log('toggleLogin');
+      this.router.navigate(['/login'], {
+        queryParams: { redirectUrl: '/home' },
+      });
     }
   }
 }

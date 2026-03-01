@@ -4,12 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map, of, throwError } from 'rxjs';
 import { BASE_URL } from '@env/environment';
 import { NotificationService } from '@common/services/notification/notification.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
   private http = inject(HttpClient);
+  private router = inject(Router);
   private notificationService = inject(NotificationService);
   private _user = signal<User | null>(null);
   public _isAdmin = computed(() => {
@@ -34,6 +36,10 @@ export class AuthenticationService {
     return this._isLoggedIn;
   }
 
+  user() {
+    return this._user.asReadonly();
+  }
+
   restoreSession() {
     const token = localStorage.getItem('token');
     const expiresAt = localStorage.getItem('expires_at');
@@ -50,15 +56,12 @@ export class AuthenticationService {
     }
   }
 
-  user() {
-    return this._user.asReadonly();
-  }
-
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user');
     this._user.set(null);
+    this.router.navigateByUrl('/');
     this.notificationService.open('Logged out successfully', 'success');
   }
 

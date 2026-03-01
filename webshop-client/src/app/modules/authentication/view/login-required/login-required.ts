@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Login } from '@module/authentication/components/login/login';
 
 @Component({
@@ -10,6 +10,14 @@ import { Login } from '@module/authentication/components/login/login';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginRequired {
-  private router = inject(Router);
-  public section = this.router.url.split('/')[1];
+  private route = inject(ActivatedRoute);
+  private $params = signal(this.route.snapshot.queryParams);
+  public $message = computed(() => {
+    const section = this.$params()?.['redirectUrl']?.split('/')[1];
+    return section ? `Please log in to access your ${section} details` : 'Please log in';
+  });
+  public $title = computed(() => {
+    const section = this.$params()?.['redirectUrl']?.split('/')[1];
+    return section && section === 'home' ? `Login` : 'Login required';
+  });
 }
