@@ -3,12 +3,14 @@ import { LoginResponse, User } from '../authentication.interface';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of, throwError } from 'rxjs';
 import { BASE_URL } from '@env/environment';
+import { NotificationService } from '@common/services/notification/notification.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
   private http = inject(HttpClient);
+  private notificationService = inject(NotificationService);
   private _user = signal<User | null>(null);
   public _isAdmin = computed(() => {
     const user = this._user();
@@ -57,6 +59,7 @@ export class AuthenticationService {
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user');
     this._user.set(null);
+    this.notificationService.open('Logged out successfully', 'success');
   }
 
   login({ email, password }: { email: string; password: string }) {
@@ -85,7 +88,7 @@ export class AuthenticationService {
   }
 
   testJwt() {
-    return this.http.get(`${BASE_URL}/auth/test-jwt`).pipe(
+    return this.http.get(`${BASE_URL}/orders`).pipe(
       map((resp) => {
         console.log('test JWT response', resp);
         return of(true);

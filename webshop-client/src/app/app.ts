@@ -52,6 +52,10 @@ export class App {
   }
 
   toggleLogin() {
-    console.log('toggleLogin');
+    if (this.$isLoggedIn()) {
+      this.authService.logout();
+    } else {
+      console.log('toggleLogin');
+    }
   }
 }

@@ -1,19 +1,4 @@
 <div class="snackbar-container">
-  @switch (data.type) {
-    @case ('success') {
-      <mat-icon class="success">check_small</mat-icon>
-    }
-    @case ('error') {
-      <mat-icon class="error">error</mat-icon>
-    }
-    @case ('warn') {
-      <mat-icon class="warn">warning</mat-icon>
-    }
-    @default {
-      <mat-icon class="information">info_i</mat-icon>
-    }
-  }
-
   <span matSnackBarLabel> {{ data.message }} </span>
   <span matSnackBarActions>
     <button
@@ -23,7 +8,20 @@
       matSnackBarAction
       (click)="snackbarRef.dismissWithAction()"
     >
-      <mat-icon>close</mat-icon>
+      @switch (data.type) {
+        @case ('success') {
+          <mat-icon class="success">check_small</mat-icon>
+        }
+        @case ('error') {
+          <mat-icon class="error">error</mat-icon>
+        }
+        @case ('warn') {
+          <mat-icon class="warn">warning</mat-icon>
+        }
+        @default {
+          <mat-icon class="information">info_i</mat-icon>
+        }
+      }
     </button>
   </span>
 </div>
