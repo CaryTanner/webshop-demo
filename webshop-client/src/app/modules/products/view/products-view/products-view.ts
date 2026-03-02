@@ -1,4 +1,4 @@
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
@@ -7,7 +7,7 @@ import { ProductsFilters } from '@module/products/components/products-filters/pr
 import { ProductsList } from '@module/products/components/products-list/products-list';
 import { GetProductsParams } from '@module/products/product.interface';
 import { ProductsService } from '@module/products/service/products-service';
-import { BehaviorSubject, combineLatest, Subject, switchMap } from 'rxjs';
+import { BehaviorSubject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-products-view',

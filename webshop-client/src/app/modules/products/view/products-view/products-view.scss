@@ -1,7 +1,25 @@
 :host {
-  div:has(h1) {
+  div.title {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+  }
+  .scroll-container {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    gap: 1rem;
+  }
+  .products-list-container {
+    max-height: calc(100vh - 140px);
+    overflow-y: scroll;
+  }
+  @media (max-width: 768px) {
+    .scroll-container {
+      grid-template-columns: 1fr;
+    }
+    .products-list-container {
+      max-height: none;
+      overflow: visible;
+    }
   }
 }
