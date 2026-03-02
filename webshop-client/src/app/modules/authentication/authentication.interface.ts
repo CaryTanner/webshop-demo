@@ -2,6 +2,8 @@ export interface User {
   id: number;
   email: string;
   isAdmin: boolean;
+  name?: string;
+  address?: string;
 }
 
 export interface LoginRequest {

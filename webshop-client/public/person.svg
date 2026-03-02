@@ -1,0 +1,7 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <!-- Simple gray silhouette: head and shoulders -->
+        <circle cx="12" cy="9" r="5" fill="#888" />
+        <ellipse cx="12" cy="18" rx="7" ry="4" fill="#888" />
+    </g>
+</svg>

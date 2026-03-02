@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MatCard } from '@angular/material/card';
 import { AuthenticationService } from '@module/authentication/service/authentication-service';
 
 @Component({
   selector: 'app-account-details',
-  imports: [],
+  imports: [MatCard],
   templateUrl: './account-details.html',
   styleUrl: './account-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

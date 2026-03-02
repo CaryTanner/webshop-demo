@@ -1,5 +1,34 @@
-<h2>Welcome back</h2>
-<p>Email: {{ $user()?.email }}</p>
-@if ($user()?.isAdmin) {
-  <p>You have admin privileges</p>
-}
+<section class="account-details-container">
+  <mat-card class="account-card">
+    <div class="account-header">
+      <div class="account-avatar">
+        <img src="person.svg" alt="User avatar" />
+      </div>
+      <div class="account-main-info">
+        <h2>Welcome back</h2>
+        <div class="account-email">
+          <span class="label">Email:</span>
+          <span class="value">{{ $user()?.email }}</span>
+        </div>
+        <div class="account-name">
+          <span class="label">Name:</span>
+          <span class="value">{{ $user()?.name || '—' }}</span>
+        </div>
+        <div class="account-address">
+          <span class="label">Address:</span>
+          <span class="value">{{ '—' }}</span>
+        </div>
+        <div class="account-role">
+          <span class="label">Role:</span>
+          <span class="value">
+            @if ($user()?.isAdmin) {
+              Admin
+            } @else {
+              User
+            }
+          </span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</section>
