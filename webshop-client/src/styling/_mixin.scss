@@ -41,8 +41,16 @@
       filled-container-shape: 4px,
       outlined-container-shape: 4px,
       protected-container-shape: 4px,
+      tonal-container-shape: 4px,
     )
   );
+  button.error-btn {
+    @include mat.button-overrides(
+      (
+        filled-container-color: theme.$error-color,
+      )
+    );
+  }
 
   @include mat.list-overrides(
     (

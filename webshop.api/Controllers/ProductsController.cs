@@ -54,14 +54,27 @@ public class ProductsController : ControllerBase
 
     // GET: api/products/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Product>> GetProduct(int id)
+    public async Task<ActionResult<object>> GetProduct(int id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products
+            .Include(p => p.Categories)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null)
         {
             return NotFound();
         }
-        return product;
+        // Project to anonymous object with SvgType as string
+        return new
+        {
+            product.Id,
+            product.Name,
+            product.Description,
+            product.Price,
+            product.Stock,
+            SvgType = product.SvgType.ToString(),
+            Categories = product.Categories.Select(c => new { c.Id, c.Name }).ToList(),
+            product.OrderItems
+        };
     }
 
     // POST: api/products
@@ -74,6 +87,15 @@ public class ProductsController : ControllerBase
         var IsAdmin = User.Claims.FirstOrDefault(c => c.Type == "IsAdmin")?.Value;
         if (IsAdmin != "True" && IsAdmin != "true")
             return Unauthorized();
+
+        // Attach existing categories instead of inserting new ones
+        if (product.Categories != null && product.Categories.Count > 0)
+        {
+            var categoryIds = product.Categories.Select(c => c.Id).ToList();
+            product.Categories = await _context.Categories
+                .Where(c => categoryIds.Contains(c.Id))
+                .ToListAsync();
+        }
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync();

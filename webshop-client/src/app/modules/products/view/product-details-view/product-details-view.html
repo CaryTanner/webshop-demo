@@ -1,4 +1,16 @@
-<h1>Product Details</h1>
+@let product = $product();
+<div>
+  <h1>Product details</h1>
+  @if ($isAdmin()) {
+    <button
+      type="button"
+      matButton="filled"
+      [routerLink]="'/products/edit/' + $productId()"
+    >
+      Edit product
+    </button>
+  }
+</div>
 @if (product; as p) {
   <section class="product-details-container">
     <mat-card class="product-card">
@@ -37,7 +49,6 @@
         <button
           type="button"
           matButton="filled"
-          color="primary"
           (click)="addToCart(p)"
           [disabled]="p.stock === 0"
         >
@@ -47,4 +58,7 @@
       </div>
     </mat-card>
   </section>
+} @else {
+  <!-- TODO add skeleton -->
+  <h2 class="loading">Loading product...</h2>
 }

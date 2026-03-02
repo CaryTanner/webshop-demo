@@ -1,6 +1,13 @@
-<h1>Manage product</h1>
+@let product = $product();
+
+@if ($productId() && !$product()) {
+  <h1>Loading product {{ $productId() }}...</h1>
+} @else {
+  <h1>Manage product</h1>
+}
+
 <form [formGroup]="form" class="product-form">
-  <mat-form-field  class="full-width">
+  <mat-form-field>
     <mat-label>Name</mat-label>
     <input matInput formControlName="name" required />
     @if (form.get('name')?.hasError('required')) {
@@ -11,7 +18,7 @@
     }
   </mat-form-field>
 
-  <mat-form-field  class="full-width">
+  <mat-form-field>
     <mat-label>Description</mat-label>
     <textarea matInput formControlName="description" rows="3"></textarea>
     <mat-hint>Max 500 characters</mat-hint>
@@ -20,7 +27,7 @@
     }
   </mat-form-field>
 
-  <mat-form-field  class="half-width">
+  <mat-form-field class="half-width">
     <mat-label>Price</mat-label>
     <input matInput type="number" formControlName="price" min="0" required />
     @if (form.get('price')?.hasError('required')) {
@@ -31,7 +38,7 @@
     }
   </mat-form-field>
 
-  <mat-form-field  class="half-width">
+  <mat-form-field class="half-width">
     <mat-label>Stock</mat-label>
     <input matInput type="number" formControlName="stock" min="0" required />
     @if (form.get('stock')?.hasError('required')) {
@@ -42,8 +49,8 @@
     }
   </mat-form-field>
 
-  <mat-form-field  class="full-width">
-    <mat-label>Type</mat-label>
+  <mat-form-field class="half-width">
+    <mat-label>Svg type</mat-label>
     <mat-select formControlName="svgType" required>
       @for (type of svgTypes; track type) {
         <mat-option [value]="type">{{ type }}</mat-option>
@@ -54,17 +61,37 @@
     }
   </mat-form-field>
 
-  <mat-form-field  class="full-width">
+  <mat-form-field class="half-width">
     <mat-label>Categories</mat-label>
     <mat-select formControlName="categories" multiple required>
       @for (cat of categories; track cat.id) {
-        <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+        <mat-option [value]="cat">{{ cat.name }}</mat-option>
       }
     </mat-select>
     @if (form.get('categories')?.hasError('required')) {
       <mat-error>At least one category is required</mat-error>
     }
   </mat-form-field>
+  @if ($productId()) {
+    <button matButton="filled" class="error-btn" type="button" (click)="deleteProduct()">
+      Delete product
+    </button>
 
-  <button matButton="filled" color="primary" type="submit" [disabled]="form.invalid">Save</button>
+    <button matButton="filled" type="button" [disabled]="form.invalid" (click)="update()">
+      Update product
+    </button>
+  } @else {
+    <button class="create-btn" matButton="filled" type="button" [disabled]="form.invalid" (click)="createProduct()">
+      Create product
+    </button>
+  }
 </form>
+
+<ng-template #deleteConfirm>
+  <h2 mat-dialog-title>Delete product</h2>
+  <mat-dialog-content>Are you sure you want to delete this product?</mat-dialog-content>
+  <mat-dialog-actions>
+    <button type="button" matButton [mat-dialog-close]="false">No</button>
+    <button type="button" matButton [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
+  </mat-dialog-actions>
+</ng-template>

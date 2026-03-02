@@ -1,5 +1,10 @@
 @import 'theme-colors';
 :host {
+  div:has(h1) {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
   .product-details-container {
     display: flex;
     justify-content: center;

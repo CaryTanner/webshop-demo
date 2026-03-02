@@ -5,7 +5,7 @@ export interface Product {
   price: number;
   stock: number;
   svgType: SvgType;
-  categories: Category[];
+  categories?: Category[];
   orderItems?: OrderItem[];
 }
 

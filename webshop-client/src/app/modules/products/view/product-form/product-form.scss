@@ -1,22 +1,21 @@
-.product-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  max-width: 600px;
-  margin: 0 auto;
-  flex-direction: column;
-}
+:host {
+  .product-form {
+    max-width: 500px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 16px;
+    row-gap: 16px;
+    margin: 3rem auto;
+  }
 
-.full-width {
-  width: 100%;
-}
+  mat-form-field:not(.half-width) {
+    grid-column: span 2;
+  }
 
-.half-width {
-  width: 48%;
-  min-width: 200px;
-}
-
-button[type='submit'] {
-  align-self: flex-end;
-  margin-top: 16px;
+  button {
+    margin-top: 1rem;
+  }
+  button.create-btn {
+    grid-column: 2 / 3;
+  }
 }

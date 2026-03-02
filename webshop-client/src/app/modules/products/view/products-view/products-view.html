@@ -1,1 +1,8 @@
-<p>products-view works!</p>
+<div>
+  <h1>Products</h1>
+  @if ($isAdmin()) {
+    <button type="button" matButton="filled" routerLink="/products/create">
+      Create product
+    </button>
+  }
+</div>
