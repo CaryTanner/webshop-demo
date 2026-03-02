@@ -1,0 +1,12 @@
+:host {
+  form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  div:has(h3) {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+}

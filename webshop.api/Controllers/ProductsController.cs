@@ -18,6 +18,7 @@ public class ProductsController : ControllerBase
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts(
         string? search = null,
         string? sortBy = null,
+        string? sortDirection = "asc",
         bool? inStock = null,
         [FromQuery] List<int>? categoryIds = null,
         int skip = 0,
@@ -41,10 +42,12 @@ public class ProductsController : ControllerBase
             products = products.Where(p => p.Stock > 0);
         }
 
-        products = sortBy switch
+        products = (sortBy, sortDirection?.ToLower()) switch
         {
-            "name" => products.OrderBy(p => p.Name),
-            "price" => products.OrderBy(p => p.Price),
+            ("name", "desc") => products.OrderByDescending(p => p.Name),
+            ("name", _) => products.OrderBy(p => p.Name),
+            ("price", "desc") => products.OrderByDescending(p => (double)p.Price),
+            ("price", _) => products.OrderBy(p => (double)p.Price),
             _ => products
         };
 

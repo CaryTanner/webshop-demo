@@ -21,6 +21,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { firstValueFrom, of, switchMap } from 'rxjs';
 import { NotificationService } from '@common/services/notification/notification.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { PRODUCT_CATEGORIES, SVG_TYPES } from '@common/injection-tokens';
 @Component({
   selector: 'app-product-form',
   imports: [
@@ -55,36 +56,10 @@ export class ProductForm {
       }),
     ),
   );
-  //TODO fetch categories/svg typesfrom backend instead of hardcoding
+  //TODO fetch categories/svg types from BE
+  svgTypes = inject(SVG_TYPES);
+  categories = inject(PRODUCT_CATEGORIES);
 
-  svgTypes = [
-    'Resistor',
-    'Capacitor',
-    'Inductor',
-    'Led',
-    'Transistor',
-    'IcChip',
-    'Microcontroller',
-    'Connector',
-    'Battery',
-    'Sensor',
-    'Display',
-    'Semiconductor',
-  ];
-
-  categories = [
-    // Example categories; replace with real data as needed
-    { id: 1, name: 'Resistors' },
-    { id: 2, name: 'Capacitors' },
-    { id: 3, name: 'Inductors' },
-    { id: 4, name: 'Semiconductors' },
-    { id: 5, name: 'Microcontrollers' },
-    { id: 6, name: 'Power' },
-    { id: 7, name: 'Connectors' },
-    { id: 8, name: 'Sensors' },
-    { id: 9, name: 'Displays' },
-    { id: 10, name: 'Passive Components' },
-  ];
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: ['', [Validators.maxLength(500)]],

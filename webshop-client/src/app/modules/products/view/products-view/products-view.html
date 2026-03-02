@@ -1,8 +1,17 @@
-<div>
-  <h1>Products</h1>
-  @if ($isAdmin()) {
-    <button type="button" matButton="filled" routerLink="/products/create">
-      Create product
-    </button>
-  }
+<div class="products-view-container">
+  <div>
+    <h1>Products</h1>
+    @if ($isAdmin()) {
+      <button type="button" matButton="filled" routerLink="/products/create">Create product</button>
+    }
+  </div>
+
+  <div class="scroll-container">
+    <div class="filters-container">
+      <app-products-filters (queryEvent)="queryProducts$.next($event)" />
+    </div>
+    <div class="products-list-container">
+      <app-products-list [$products]="products$ | async" />
+    </div>
+  </div>
 </div>

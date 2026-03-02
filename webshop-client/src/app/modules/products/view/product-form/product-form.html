@@ -1,6 +1,6 @@
 @let product = $product();
 
-@if ($productId() && !$product()) {
+@if ($productId() && !product) {
   <h1>Loading product {{ $productId() }}...</h1>
 } @else {
   <h1>Manage product</h1>
@@ -73,15 +73,32 @@
     }
   </mat-form-field>
   @if ($productId()) {
-    <button matButton="filled" class="error-btn" type="button" (click)="deleteProduct()">
+    <button
+      matButton="filled"
+      class="error-btn"
+      type="button"
+      [disabled]="$loading() || ($productId() && !product)"
+      (click)="deleteProduct()"
+    >
       Delete product
     </button>
 
-    <button matButton="filled" type="button" [disabled]="form.invalid" (click)="update()">
+    <button
+      matButton="filled"
+      type="button"
+      [disabled]="form.invalid || $loading() || ($productId() && !product)"
+      (click)="update()"
+    >
       Update product
     </button>
   } @else {
-    <button class="create-btn" matButton="filled" type="button" [disabled]="form.invalid" (click)="createProduct()">
+    <button
+      class="create-btn"
+      matButton="filled"
+      type="button"
+      [disabled]="form.invalid || $loading()"
+      (click)="createProduct()"
+    >
       Create product
     </button>
   }

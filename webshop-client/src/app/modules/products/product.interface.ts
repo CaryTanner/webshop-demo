@@ -36,3 +36,12 @@ export enum SvgType {
   Display = 'Display',
   Semiconductor = 'Semiconductor',
 }
+
+export interface GetProductsParams {
+  search?: string;
+  sortBy?: 'name' | 'price';
+  inStock?: boolean;
+  categoryIds?: number[];
+  skip?: number;
+  limit?: number;
+}

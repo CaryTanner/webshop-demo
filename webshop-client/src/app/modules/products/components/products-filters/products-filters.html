@@ -1,1 +1,30 @@
-<p>products-filters works!</p>
+<form [formGroup]="form" class="products-filters-form">
+  <div>
+    <h3>Filter products</h3>
+    <mat-icon>filter_list</mat-icon>
+  </div>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Search product name</mat-label>
+    <input matInput formControlName="search" />
+  </mat-form-field>
+
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Categories</mat-label>
+    <mat-select formControlName="categoryIds" multiple>
+      @for (cat of categories; track cat) {
+        <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Sort by</mat-label>
+    <mat-select formControlName="sort">
+      @for (sortOpt of sortOptions; track sortOpt.text) {
+        <mat-option [value]="sortOpt">{{ sortOpt.text }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-checkbox formControlName="inStock"> In stock only </mat-checkbox>
+</form>

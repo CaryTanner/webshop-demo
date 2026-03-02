@@ -6,28 +6,24 @@
       </div>
       <div class="account-main-info">
         <h2>Welcome back</h2>
-        <div class="account-email">
+        <div>
           <span class="label">Email:</span>
           <span class="value">{{ $user()?.email }}</span>
         </div>
-        <div class="account-name">
+        <div>
           <span class="label">Name:</span>
           <span class="value">{{ $user()?.name || '—' }}</span>
         </div>
-        <div class="account-address">
+        <div>
           <span class="label">Address:</span>
           <span class="value">{{ '—' }}</span>
         </div>
-        <div class="account-role">
-          <span class="label">Role:</span>
-          <span class="value">
-            @if ($user()?.isAdmin) {
-              Admin
-            } @else {
-              User
-            }
-          </span>
-        </div>
+        @if ($user()?.isAdmin) {
+          <div>
+            <span class="label">Role:</span>
+            <span class="value"> Admin </span>
+          </div>
+        }
       </div>
     </div>
   </mat-card>
