@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 2rem;
   }
   .scroll-container {
     display: grid;
@@ -20,6 +21,9 @@
     .products-list-container {
       max-height: none;
       overflow: visible;
+    }
+    div.title {
+      margin-bottom: 1rem;
     }
   }
 }

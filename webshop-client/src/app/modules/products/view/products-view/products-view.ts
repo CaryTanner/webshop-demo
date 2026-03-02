@@ -7,7 +7,7 @@ import { ProductsFilters } from '@module/products/components/products-filters/pr
 import { ProductsList } from '@module/products/components/products-list/products-list';
 import { GetProductsParams } from '@module/products/product.interface';
 import { ProductsService } from '@module/products/service/products-service';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { BehaviorSubject, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-products-view',
@@ -26,7 +26,7 @@ export class ProductsView {
   getProducts() {
     return this.queryProducts$.pipe(
       switchMap((query) => {
-        return this.productsService.getProducts(query);
+        return this.productsService.getProducts(query).pipe(startWith(null)); // startWith null to show loading state in the UI
       }),
     );
   }

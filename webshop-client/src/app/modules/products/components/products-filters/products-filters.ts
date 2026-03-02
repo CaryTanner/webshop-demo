@@ -37,8 +37,8 @@ export class ProductsFilters {
   sortOptions = [
     { text: 'Name A-Z', sortBy: 'name', sortDirection: 'asc' },
     { text: 'Name Z-A', sortBy: 'name', sortDirection: 'desc' },
-    { text: 'Price $ to $$$', sortBy: 'price', sortDirection: 'asc' },
-    { text: 'Price $$$ to $', sortBy: 'price', sortDirection: 'desc' },
+    { text: 'Price: increasing', sortBy: 'price', sortDirection: 'asc' },
+    { text: 'Price: decreasing', sortBy: 'price', sortDirection: 'desc' },
   ];
 
   form = this.fb.group({
