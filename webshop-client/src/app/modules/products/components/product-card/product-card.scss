@@ -1,4 +1,4 @@
-@import 'theme-colors';
+@use 'theme-colors' as theme;
 
 :host {
   .product-card {
@@ -6,17 +6,13 @@
     padding: 1rem 1.5rem 1rem 1.3rem;
     box-sizing: border-box;
     border-radius: 20px;
-    border: 1px solid $neutral-bg;
+    border: 1px solid theme.$neutral-bg;
     background-color: transparent;
-    transition: background-color 0.2s;
     container-type: inline-size;
     &.in-cart {
       border: none;
     }
 
-    .product-card:hover {
-      background-color: $light-bg;
-    }
     .product-link {
       text-decoration: none;
       color: inherit;
@@ -51,13 +47,21 @@
         font-size: 1.2rem;
         font-weight: 700;
         margin: 0;
-        color: $text-primary;
+        color: theme.$text-primary;
       }
     }
     .product-main-info .product-price {
       font-size: 1.1rem;
       font-weight: 600;
-      color: $text-tertiary;
+      color: theme.$text-tertiary;
+    }
+  }
+  @media (max-width: 600px) {
+    .product-card {
+      padding: 0.8rem 1rem;
+      &.in-cart {
+        padding-left: 0;
+      }
     }
   }
 }

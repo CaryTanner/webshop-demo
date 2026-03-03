@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import {
   Order,
   OrderItem,
@@ -82,6 +84,8 @@ const mockProducts = [
     MatButtonModule,
     MatIconModule,
     ProductCard,
+    MatSelectModule,
+    MatOptionModule,
   ],
   templateUrl: './cart.html',
   styleUrl: './cart.scss',
@@ -214,6 +218,7 @@ export class Cart {
     userId: null,
     items: this.fb.array([]),
   });
+  public selectNumbers = Array.from({ length: 100 }, (_, i) => i + 1);
 
   get itemsArr() {
     return (this.form?.get('items') as FormArray) ?? this.fb.array([]);

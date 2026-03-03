@@ -15,8 +15,11 @@
     gap: 1rem;
   }
   @media (max-width: 600px) {
+    .cart-container form {
+      grid-template-columns: 2.5fr 1fr;
+    }
     .controls-container {
-      grid-template-columns: 1.5fr 1fr;
+      grid-template-columns: 2fr 1fr;
       gap: 0.5rem;
     }
   }

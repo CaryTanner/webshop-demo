@@ -34,7 +34,7 @@ public class ProductsController : ControllerBase
 
         if (!string.IsNullOrWhiteSpace(search))
         {
-            products = products.Where(p => p.Name.Contains(search));
+            products = products.Where(p => p.Name.ToLower().Contains(search.ToLower()));
         }
 
         if (inStock == true)
@@ -44,8 +44,8 @@ public class ProductsController : ControllerBase
 
         products = (sortBy, sortDirection?.ToLower()) switch
         {
-            ("name", "desc") => products.OrderByDescending(p => p.Name),
-            ("name", _) => products.OrderBy(p => p.Name),
+            ("name", "desc") => products.OrderByDescending(p => p.Name.ToLower()),
+            ("name", _) => products.OrderBy(p => p.Name.ToLower()),
             ("price", "desc") => products.OrderByDescending(p => (double)p.Price),
             ("price", _) => products.OrderBy(p => (double)p.Price),
             _ => products

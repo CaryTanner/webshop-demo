@@ -1,10 +1,15 @@
-@import 'theme-colors';
-@import 'mixin';
+@use 'theme-colors' as theme;
+@use 'mixin' as mixin;
+
 :host {
   div:has(h1) {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+  }
+  h2.loading {
+    margin: 4rem auto;
+    text-align: center;
   }
   .product-details-container {
     display: flex;
@@ -14,7 +19,7 @@
   }
 
   .product-card {
-    @include app-card;
+    @include mixin.app-card;
   }
 
   .product-header {
@@ -45,7 +50,7 @@
     line-height: 2rem;
     font-weight: 700;
     margin: 0;
-    color: $text-primary;
+    color: theme.$text-primary;
   }
 
   .product-categories {
@@ -60,18 +65,18 @@
   }
   .product-price .price {
     font-weight: 600;
-    color: $text-tertiary;
+    color: theme.$text-tertiary;
   }
   .product-price .stock {
     font-size: 1rem;
     font-weight: 500;
-    color: $text-tertiary;
+    color: theme.$text-tertiary;
   }
   .product-price .in-stock {
-    color: $success-color;
+    color: theme.$success-color;
   }
   .product-price .out-of-stock {
-    color: $error-color;
+    color: theme.$error-color;
   }
 
   .product-description {
@@ -81,10 +86,10 @@
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: $text-secondary;
+    color: theme.$text-secondary;
   }
   .product-description p {
-    color: $text-tertiary;
+    color: theme.$text-tertiary;
     font-size: 1rem;
   }
 

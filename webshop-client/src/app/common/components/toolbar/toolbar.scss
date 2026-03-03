@@ -1,4 +1,4 @@
-@import 'theme-colors';
+@use 'theme-colors' as theme;
 :host {
   .toolbar-title-link {
     color: inherit;
