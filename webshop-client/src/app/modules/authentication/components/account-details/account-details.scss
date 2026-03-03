@@ -1,4 +1,5 @@
 @import 'theme-colors';
+@import 'mixin';
 :host {
   .account-details-container {
     display: flex;
@@ -8,15 +9,7 @@
   }
 
   .account-card {
-    width: 100%;
-    max-width: 540px;
-    padding: 2rem 2rem 1.5rem 2rem;
-    border-radius: 20px;
-    box-shadow: var(--mat-elevation-shadow-4);
-    background: var(--mat-sys-surface, #fff);
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    @include app-card;
   }
 
   .account-header {

@@ -4,7 +4,7 @@ import { authGuard } from '@common/guards/auth/auth-guard';
 
 export const routes: Routes = [
   {
-    path: 'order',
+    path: '',
     component: OrdersView,
     canActivate: [authGuard],
   },

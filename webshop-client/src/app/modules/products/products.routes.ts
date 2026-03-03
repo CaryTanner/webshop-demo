@@ -6,21 +6,22 @@ import { ProductForm } from './view/product-form/product-form';
 
 export const routes: Routes = [
   {
-    path: 'products',
+    path: '',
     component: ProductsView,
+    pathMatch: 'full',
   },
   {
-    path: 'products/create',
+    path: 'create',
     component: ProductForm,
     canActivate: [adminGuard],
   },
   {
-    path: 'products/edit/:id',
+    path: 'edit/:id',
     component: ProductForm,
     canActivate: [adminGuard],
   },
   {
-    path: 'products/:id',
+    path: ':id',
     component: ProductDetailsView,
   },
 ];

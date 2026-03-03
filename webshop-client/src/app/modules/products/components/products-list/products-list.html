@@ -9,24 +9,8 @@
 
   <ul class="products-list">
     @for (product of $products(); track product.id) {
-      <li class="product-card">
-        <a
-          class="product-link"
-          [attr.aria-label]="'View details for ' + product.name"
-          routerLink="/products/{{ product.id }}"
-        >
-          <div class="product-header">
-            <div class="product-svg">
-              <img [src]="product.svgType + '.svg'" [alt]="product.svgType + ' icon'" />
-            </div>
-            <div class="product-main-info">
-              <h2>{{ product.name }}</h2>
-              <div class="product-price">
-                <span class="price">{{ product.price | currency }}</span>
-              </div>
-            </div>
-          </div>
-        </a>
+      <li>
+        <app-product-card [$product]="product" />
       </li>
     }
   </ul>

@@ -1,3 +1,5 @@
+import { OrderItem } from '@module/orders/order.interface';
+
 export interface Product {
   id: number;
   name: string;
@@ -12,14 +14,6 @@ export interface Product {
 export interface Category {
   id: number;
   name: string;
-}
-
-export interface OrderItem {
-  id: number;
-  quantity: number;
-  unitPrice: number;
-  orderId: number;
-  productId: number;
 }
 
 export enum SvgType {

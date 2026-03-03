@@ -52,7 +52,19 @@ public class ProductsController : ControllerBase
         };
 
         var paged = products.Skip(skip).Take(limit);
-        return await paged.ToListAsync();
+        var result = await paged
+        .Select(p => new
+        {
+            p.Id,
+            p.Name,
+            p.Description,
+            p.Price,
+            p.Stock,
+            SvgType = p.SvgType.ToString(),
+            Categories = p.Categories.Select(c => new { c.Id, c.Name }).ToList()
+        })
+        .ToListAsync();
+        return Ok(result);
     }
 
     // GET: api/products/5

@@ -1,0 +1,25 @@
+<div class="cart-container">
+  <form [formGroup]="form">
+    <ng-container formArrayName="items">
+      @for (itemGroup of itemsArr.controls; track itemGroup; let idx = $index) {
+        <app-product-card [$product]="itemsArr.at(idx).get('product')?.value" [$isInCart]="true" />
+        <div class="controls-container" [formGroupName]="idx">
+          <mat-form-field subscriptSizing="dynamic">
+            <input
+              matInput
+              type="number"
+              formControlName="quantity"
+              min="1"
+              [attr.aria-label]="
+                'Quantity for item ' + itemsArr.at(idx).get('product')?.value?.name
+              "
+            />
+          </mat-form-field>
+          <button type="button" mat-icon-button (click)="onDeleteItem(idx)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+    </ng-container>
+  </form>
+</div>

@@ -14,19 +14,19 @@ export const routes: Routes = [
     component: LoginRequired,
   },
   {
-    path: '',
+    path: 'products',
     loadChildren: () => import('./modules/products/products.routes').then((m) => m.routes),
   },
 
   // Lazy loaded other routes
   {
-    path: '',
+    path: 'account',
     loadChildren: () =>
       import('./modules/authentication/authentication.routes').then((m) => m.routes),
   },
 
   {
-    path: '',
+    path: 'order',
     loadChildren: () => import('./modules/orders/orders.routes').then((m) => m.routes),
   },
 
