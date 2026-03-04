@@ -22,6 +22,7 @@ import { firstValueFrom, of, switchMap } from 'rxjs';
 import { NotificationService } from '@common/services/notification/notification.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { PRODUCT_CATEGORIES, SVG_TYPES } from '@common/injection-tokens';
+import { ROUTE_PATHS } from 'src/app/app.routes';
 @Component({
   selector: 'app-product-form',
   imports: [
@@ -105,7 +106,7 @@ export class ProductForm {
       if (!result.id) return;
       this.notificationService.open('Product created successfully', 'success');
 
-      this.router.navigate(['/products', 'edit', result.id]);
+      this.router.navigate([ROUTE_PATHS.products['editBase'], result.id]);
     } finally {
       this.$loading.set(false);
     }
@@ -122,7 +123,7 @@ export class ProductForm {
     try {
       await firstValueFrom(this.productsService.deleteProduct(this.$productId()));
       this.notificationService.open('Product deleted successfully', 'success');
-      this.router.navigate(['/products']);
+      this.router.navigate([ROUTE_PATHS.products['base']]);
     } finally {
       this.$loading.set(false);
     }

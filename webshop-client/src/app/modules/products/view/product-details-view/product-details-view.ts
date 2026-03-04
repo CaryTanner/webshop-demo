@@ -11,6 +11,7 @@ import { Product } from '@module/products/product.interface';
 import { ProductsService } from '@module/products/service/products-service';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
+import { ROUTE_PATHS } from 'src/app/app.routes';
 
 @Component({
   selector: 'app-product-details-view',
@@ -20,6 +21,7 @@ import { switchMap } from 'rxjs/internal/operators/switchMap';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailsView {
+  public prodEditPath = ROUTE_PATHS.products['editBase'];
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthenticationService);

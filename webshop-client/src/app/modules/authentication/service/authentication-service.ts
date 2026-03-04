@@ -14,13 +14,16 @@ export class AuthenticationService {
   private router = inject(Router);
   private notificationService = inject(NotificationService);
   private _user = signal<User | null>(null);
+  private _expiresAt = signal<Date | null>(null);
   public _isAdmin = computed(() => {
     const user = this._user();
     return user?.isAdmin || false;
   });
+
   public _isLoggedIn = computed(() => {
     const user = this._user();
-    return !!user;
+    const expiresAt = this._expiresAt();
+    return !!user && !!expiresAt && expiresAt > new Date();
   });
 
   constructor() {
@@ -81,6 +84,7 @@ export class AuthenticationService {
         );
 
         this._user.set({ email: resp.email, isAdmin: resp.isAdmin, id: resp.userId });
+        this._expiresAt.set(new Date(resp.expiresAt));
 
         return of(true); // complete the observable with a success value, data access via signals
       }),

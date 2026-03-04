@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '@module/authentication/service/authentication-service';
 import { firstValueFrom } from 'rxjs';
+import { ROUTE_PATHS } from 'src/app/app.routes';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ import { firstValueFrom } from 'rxjs';
   styleUrl: './login.scss',
 })
 export class Login {
+  private homePath = ROUTE_PATHS.app['home'];
   fb = inject(FormBuilder);
   authService = inject(AuthenticationService);
   private route = inject(ActivatedRoute);
@@ -37,15 +39,12 @@ export class Login {
   });
 
   async onSubmit() {
-    console.log('Login form submitted', this.loginForm.value);
     this.$loading.set(true);
     if (this.loginForm.valid) {
       // handle login
       try {
         await firstValueFrom(this.authService.login(this.loginForm.value));
-        if (this.$redirectUrl()) {
-          this.router.navigateByUrl(this.$redirectUrl());
-        }
+        this.router.navigateByUrl(this.$redirectUrl() || this.homePath);
       } catch {
         this.loginForm.controls['email']?.setErrors({ loginFailed: true });
       } finally {

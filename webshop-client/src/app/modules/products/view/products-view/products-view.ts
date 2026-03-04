@@ -8,6 +8,7 @@ import { ProductsList } from '@module/products/components/products-list/products
 import { GetProductsParams } from '@module/products/product.interface';
 import { ProductsService } from '@module/products/service/products-service';
 import { BehaviorSubject, startWith, switchMap } from 'rxjs';
+import { ROUTE_PATHS } from 'src/app/app.routes';
 
 @Component({
   selector: 'app-products-view',
@@ -18,6 +19,7 @@ import { BehaviorSubject, startWith, switchMap } from 'rxjs';
 })
 export class ProductsView {
   private authService = inject(AuthenticationService);
+  public createProductPath = ROUTE_PATHS.products['create'];
   public $isAdmin = this.authService.isAdmin();
   public productsService = inject(ProductsService);
   public queryProducts$ = new BehaviorSubject<GetProductsParams>({} as GetProductsParams);

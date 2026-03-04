@@ -10,6 +10,7 @@ import { AuthenticationService } from '@module/authentication/service/authentica
 import { ToolbarComponent } from '@common/components/toolbar/toolbar';
 import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ROUTE_PATHS } from './app.routes';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
+  public routePaths = ROUTE_PATHS;
   private breakpointObserver = inject(BreakpointObserver);
   private router = inject(Router);
   public $isMobile = this.handleMobile();
@@ -55,8 +57,8 @@ export class App {
     if (this.$isLoggedIn()) {
       this.authService.logout();
     } else {
-      this.router.navigate(['/login'], {
-        queryParams: { redirectUrl: '/home' },
+      this.router.navigate([this.routePaths.app['login']], {
+        queryParams: { redirectUrl: this.routePaths.app['home'] },
       });
     }
   }

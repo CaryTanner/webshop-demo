@@ -3,25 +3,25 @@ import { ProductDetailsView } from './view/product-details-view/product-details-
 import { ProductsView } from './view/products-view/products-view';
 import { adminGuard } from '@common/guards/admin/admin-guard';
 import { ProductForm } from './view/product-form/product-form';
+import { productsRoutePaths } from 'src/app/app.routes';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: productsRoutePaths.base,
     component: ProductsView,
-    pathMatch: 'full',
   },
   {
-    path: 'create',
+    path: productsRoutePaths.create,
     component: ProductForm,
     canActivate: [adminGuard],
   },
   {
-    path: 'edit/:id',
+    path: `${productsRoutePaths.editBase}:id`,
     component: ProductForm,
     canActivate: [adminGuard],
   },
   {
-    path: ':id',
+    path: `${productsRoutePaths.detailsBase}:id`,
     component: ProductDetailsView,
   },
 ];

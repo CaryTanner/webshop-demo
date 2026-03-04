@@ -1,7 +1,7 @@
 <div class="product-card" [class.in-cart]="$isInCart()">
   <a
     [attr.aria-label]="'View details for ' + $product()?.name"
-    routerLink="/products/{{ $product()?.id }}"
+    [routerLink]="prodDetailsPath + $product()?.id"
     [state]="$product()"
   >
     <div class="product-body">

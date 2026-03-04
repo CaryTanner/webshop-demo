@@ -2,7 +2,7 @@
 <div>
   <h1>Product details</h1>
   @if ($isAdmin()) {
-    <button type="button" matButton="filled" [routerLink]="'/products/edit/' + $productId()">
+    <button type="button" matButton="filled" [routerLink]="prodEditPath + $productId()">
       Edit product
     </button>
   }
