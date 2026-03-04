@@ -41,7 +41,7 @@
         <h2>Description</h2>
         <p>{{ p.description || 'No description available.' }}</p>
       </div>
-      <div class="product-actions">
+      <div>
         <button type="button" matButton="filled" (click)="addToCart(p)" [disabled]="p.stock === 0">
           <mat-icon>add_shopping_cart</mat-icon>
           Add to Cart
