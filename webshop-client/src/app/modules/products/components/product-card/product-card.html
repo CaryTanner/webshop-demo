@@ -1,17 +1,16 @@
 <div class="product-card" [class.in-cart]="$isInCart()">
   <a
-    class="product-link"
     [attr.aria-label]="'View details for ' + $product()?.name"
     routerLink="/products/{{ $product()?.id }}"
+    [state]="$product()"
   >
-    <div class="product-header">
-      <div class="product-svg">
-        <img [src]="$product()?.svgType + '.svg'" [alt]="$product()?.svgType + ' icon'" />
-      </div>
-      <div class="product-main-info">
+    <div class="product-body">
+      <img [src]="$product()?.svgType + '.svg'" [alt]="$product()?.svgType + ' icon'" />
+
+      <div>
         <h2>{{ $product()?.name }}</h2>
         <div class="product-price">
-          <span class="price">{{ $product()?.price | currency }}</span>
+          <span>{{ $product()?.price | currency }}</span>
         </div>
       </div>
     </div>

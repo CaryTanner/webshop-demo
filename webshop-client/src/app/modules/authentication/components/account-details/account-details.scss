@@ -8,46 +8,49 @@
     padding: 2rem 0;
   }
 
-  .account-card {
+  div.card {
     @include mixin.app-card;
-  }
 
-  .account-header {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-  }
+    .card-body {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
 
-  .account-avatar img {
-    width: 96px;
-    height: 96px;
-    object-fit: contain;
-    background: var(--mat-sys-surface-container-low, #f9f9ff);
-    border-radius: 12px;
-    padding: 0.5rem;
-  }
+      img {
+        width: 96px;
+        height: 96px;
+        object-fit: contain;
+        background: var(--mat-sys-surface-container-low, #f9f9ff);
+        border-radius: 12px;
+        padding: 0.5rem;
+      }
 
-  .account-main-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+      div:has(h2) {
+        flex: 1;
 
-  .account-main-info h2 {
-    font-size: 2rem;
-    line-height: 2rem;
-    font-weight: 700;
-    margin: 0;
-    color: theme.$text-primary;
-  }
+        h2 {
+          font-size: 2rem;
+          line-height: 2rem;
+          font-weight: 700;
+          margin: 0 0 0.8rem 0;
+          color: theme.$text-primary;
+        }
+      }
+      div.info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
 
-  .label {
-    font-weight: 600;
-    color: theme.$text-secondary;
-    margin-right: 0.5rem;
-  }
-  .value {
-    color: $text-tertiary;
+        .label {
+          font-weight: 600;
+          color: theme.$text-secondary;
+          margin-right: 0.5rem;
+        }
+        .value {
+          color: theme.$text-tertiary;
+        }
+      }
+    }
   }
 }

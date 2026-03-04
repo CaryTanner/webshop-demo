@@ -2,20 +2,16 @@
 <div>
   <h1>Product details</h1>
   @if ($isAdmin()) {
-    <button
-      type="button"
-      matButton="filled"
-      [routerLink]="'/products/edit/' + $productId()"
-    >
+    <button type="button" matButton="filled" [routerLink]="'/products/edit/' + $productId()">
       Edit product
     </button>
   }
 </div>
 @if (product; as p) {
   <section class="product-details-container">
-    <mat-card class="product-card">
-      <div class="product-header">
-        <div class="product-svg">
+    <div class="card">
+      <div class="card-body">
+        <div>
           <img [src]="p.svgType + '.svg'" [alt]="p.svgType + ' icon'" />
         </div>
         <div class="product-main-info">
@@ -33,7 +29,7 @@
             <span class="price">{{ p.price | currency }}</span>
             <span
               class="stock"
-              [ngClass]="{ 'in-stock': p.stock > 0, 'out-of-stock': p.stock === 0 }"
+              [class]="{ 'in-stock': p.stock > 0, 'out-of-stock': p.stock === 0 }"
             >
               {{ p.stock > 0 ? p.stock + ' in stock' : 'Out of stock' }}
             </span>
@@ -46,17 +42,12 @@
         <p>{{ p.description || 'No description available.' }}</p>
       </div>
       <div class="product-actions">
-        <button
-          type="button"
-          matButton="filled"
-          (click)="addToCart(p)"
-          [disabled]="p.stock === 0"
-        >
+        <button type="button" matButton="filled" (click)="addToCart(p)" [disabled]="p.stock === 0">
           <mat-icon>add_shopping_cart</mat-icon>
           Add to Cart
         </button>
       </div>
-    </mat-card>
+    </div>
   </section>
 } @else {
   <!-- TODO add skeleton -->

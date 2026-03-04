@@ -11,6 +11,6 @@ import { Product } from '@module/products/product.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCard {
-  $product = input.required<Product | null>();
+  $product = input.required<Product | undefined>();
   $isInCart = input<boolean>(false);
 }
