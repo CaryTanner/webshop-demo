@@ -8,6 +8,4 @@ import { RouterModule } from '@angular/router';
   styleUrl: './orders-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrdersView {
-
-}
+export class OrdersView {}

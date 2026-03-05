@@ -1,9 +1,9 @@
 @let product = $product();
 <div>
   <h1>Product details</h1>
-  @if ($quantityInCart()) {
-    <mat-chip>Quantity in cart: {{ $quantityInCart() }} </mat-chip>
-  }
+
+  <mat-chip>Quantity in cart: {{ $quantityInCart() }} </mat-chip>
+
   @if ($isAdmin()) {
     <button type="button" matButton="filled" [routerLink]="prodEditPath + $productId()">
       Edit product

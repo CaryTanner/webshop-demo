@@ -5,13 +5,17 @@
         <app-product-card [$product]="itemsArr.at(idx).get('product')?.value" [$isInCart]="true" />
         <div class="controls-container" [formGroupName]="idx">
           <mat-form-field subscriptSizing="dynamic">
-            <mat-select formControlName="quantity">
+            <mat-select formControlName="quantity" (selectionChange)="onQuantityChange($event, idx)">
               @for (num of selectNumbers; track num) {
                 <mat-option [value]="num">{{ num }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
-          <button type="button" mat-icon-button (click)="onDeleteItem(idx)">
+          <button
+            type="button"
+            mat-icon-button
+            (click)="onDeleteItem(idx, itemsArr.at(idx).get('productId')?.value)"
+          >
             <mat-icon>delete</mat-icon>
           </button>
         </div>

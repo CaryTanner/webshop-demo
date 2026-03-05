@@ -28,20 +28,22 @@ export const productsRoutePaths = {
 const ordersBase = 'orders';
 export const ordersRoutePaths = {
   base: ordersBase,
+  cart: 'cart',
+  checkout: 'checkout',
 };
 
 // Route definitions use relative paths, but components need absolute paths.
-const makeAbsolutePaths = (pathObject: Record<string, string>) => {
+const makeAbsolutePaths = (pathObject: Record<string, string>, basePath = '') => {
   const absolutePaths: Record<string, string> = {};
   Object.entries(pathObject).forEach(([key, value]) => {
-    absolutePaths[key] = `/${value}`;
+    absolutePaths[key] = basePath === value ? `/${value}` : `/${basePath}/${value}`;
   });
   return absolutePaths;
 };
 
 export const ROUTE_PATHS = {
   app: makeAbsolutePaths(appRoutePaths),
-  orders: makeAbsolutePaths(ordersRoutePaths),
+  orders: makeAbsolutePaths(ordersRoutePaths, `${ordersBase}`),
   authentication: makeAbsolutePaths(authenticationRoutePaths),
   products: makeAbsolutePaths(productsRoutePaths),
 };

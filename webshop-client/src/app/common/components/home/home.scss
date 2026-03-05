@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use 'theme-colors' as theme;
+@use '_mixin' as mixin;
 :host {
   .hero {
     display: flex;
@@ -18,62 +19,58 @@
       padding: 2rem 1rem;
       gap: 1.5rem;
 
-      .hero-image {
+      .hero-image img {
         display: none;
       }
+    }
 
-      .hero-content button {
-        align-self: center;
+    .hero-content {
+      flex: 1 1 60%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      justify-content: center;
+
+      h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: theme.$text-primary;
+        margin-bottom: 0.5rem;
+        line-height: 2.5rem;
+        text-wrap: balance;
+      }
+
+      p {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      ul {
+        list-style: disc inside;
+        color: var(--mat-sys-on-surface-variant, var(--mat-sys-on-surface));
+        margin-bottom: 1.5rem;
+        padding-left: 1.2rem;
+      }
+
+      button {
+        @include mixin.cta-button;
+        align-self: flex-start;
+        @media (max-width: 900px) {
+          align-self: center;
+        }
       }
     }
-  }
 
-  .hero-content {
-    flex: 1 1 60%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    justify-content: center;
-  }
-
-  .hero-content h1 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: theme.$text-primary;
-    margin-bottom: 0.5rem;
-    line-height: 2.5rem;
-  }
-
-  .hero-content .subtitle {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .hero-content ul {
-    list-style: disc inside;
-    color: var(--mat-sys-on-surface-variant, var(--mat-sys-on-surface));
-    margin-bottom: 1.5rem;
-    padding-left: 1.2rem;
-  }
-
-  .hero-content button {
-    align-self: flex-start;
-    font-size: 1.3rem;
-    padding: 1.2rem 2.3rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  .hero-image {
-    flex: 1 1 40%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hero-image img {
-    max-width: 340px;
-    width: 100%;
-    height: auto;
+    .hero-image {
+      flex: 1 1 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        max-width: 340px;
+        width: 100%;
+        height: auto;
+      }
+    }
   }
 }

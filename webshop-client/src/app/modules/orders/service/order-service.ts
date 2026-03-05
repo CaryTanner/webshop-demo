@@ -1,6 +1,7 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 import { CartItem, CartStorage } from '../order.interface';
 import { Product } from '@module/products/product.interface';
+import * as currencyJs from 'currency.js';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private _cart = signal<CartItem[]>([]);
@@ -9,6 +10,14 @@ export class OrderService {
     return this._cart()?.length;
   });
   private CART_KEY = 'cart_key';
+  public $cartTotal = computed(() => {
+    const cartItems = this._cart();
+    if (!cartItems?.length) return 0;
+    const total = cartItems.reduce((sum, item) => {
+      return sum.add(currencyJs(item.unitPrice).multiply(item.quantity));
+    }, currencyJs(0));
+    return total.value;
+  });
 
   constructor() {
     // reload cart from storage on init
@@ -60,14 +69,12 @@ export class OrderService {
       items: this._cart(),
       savedAt: new Date().toISOString(),
     };
-    console.log('saving cart', cartStorage)
     localStorage.setItem(this.CART_KEY, JSON.stringify(cartStorage));
   }
 
   addItem(product: Product) {
     const exists = this._cart().find((item) => item.productId === product.id);
     if (exists) {
-      console.log('exists', exists)
       return this.updateItemQuantity(product.id, exists.quantity + 1);
     }
     this._cart.update((currentCart) => {

@@ -53,7 +53,7 @@ export class App {
   }
 
   toggleShoppingCart() {
-    console.log('toggleShoppingCart');
+    this.router.navigate([this.routePaths.orders['cart']]);
   }
 
   toggleLogin() {

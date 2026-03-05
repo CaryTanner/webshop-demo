@@ -50,13 +50,12 @@ export class ProductDetailsView {
 
   addToCart(product: Product) {
     if (!product.id) return;
-    console.log('Adding to cart:', product);
     this.orderService.addItem(product);
     this.notificationService.open('Product added', 'success');
   }
 
   setQuantityInCart(cartItems: CartItem[]) {
-    if (!cartItems?.length) return false;
+    if (!cartItems?.length) return 0;
     const exists = cartItems.find((item) => item.productId === this.$productId());
     return exists ? exists.quantity : 0;
   }
