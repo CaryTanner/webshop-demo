@@ -1,1 +1,30 @@
-<p>item-total works!</p>
+<div class="item-total-card">
+  <div>
+    <div class="totals-row">
+      <span>Subtotal</span>
+      <span>{{ $total() | number: '1.2-2' }}</span>
+    </div>
+    <div class="totals-row">
+      <span>Tax</span>
+      <span>{{ $tax() | number: '1.2-2' }}</span>
+    </div>
+    <div class="totals-row">
+      <span>Shipping</span>
+      <span>{{ $shipping() }}</span>
+    </div>
+    <div class="totals-row">
+      <span>Total</span>
+      <span>{{ $total() + $tax() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
+    </div>
+  </div>
+  <button
+    type="button"
+    matButton="filled"
+    color="primary"
+    class="cta-button"
+    [disabled]="$actionDisabled()"
+    (click)="$actionEmission.emit()"
+  >
+    {{ $actionText() }}
+  </button>
+</div>

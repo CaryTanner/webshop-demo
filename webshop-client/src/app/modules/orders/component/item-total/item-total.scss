@@ -1,0 +1,25 @@
+@use 'mixin' as mixin;
+@use 'theme-colors' as theme;
+:host {
+  .item-total-card {
+    button {
+      @include mixin.cta-button;
+      margin-top: 1rem;
+      width: 100%;
+    }
+    .totals-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+      padding: 0.2rem 0;
+      &:last-of-type {
+        margin-top: 0.8rem;
+        padding-top: 0.8rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        border-top: 1px solid theme.$dark-bg;
+      }
+    }
+  }
+}

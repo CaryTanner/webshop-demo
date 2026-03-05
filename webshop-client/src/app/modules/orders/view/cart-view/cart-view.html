@@ -16,5 +16,10 @@
       (quantityChangeEvent)="onQuantityChange($event)"
       (deleteItemEvent)="onDeleteItem($event)"
     />
+    <app-item-total
+      [$total]="$cartTotal()"
+      [$tax]="0"
+      [$actionText]="'Proceed to Checkout'"
+      ($actionEmission)="onProceedToCheckout()" />
   }
 </div>

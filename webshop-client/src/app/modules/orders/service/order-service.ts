@@ -1,7 +1,7 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 import { CartItem, CartStorage } from '../order.interface';
 import { Product } from '@module/products/product.interface';
-import * as currencyJs from 'currency.js';
+import currencyJs from 'currency.js';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private _cart = signal<CartItem[]>([]);
