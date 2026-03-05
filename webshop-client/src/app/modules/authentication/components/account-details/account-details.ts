@@ -10,5 +10,5 @@ import { AuthenticationService } from '@module/authentication/service/authentica
 })
 export class AccountDetails {
   private authService = inject(AuthenticationService);
-  public $user = this.authService.user();
+  public $user = this.authService.$user;
 }

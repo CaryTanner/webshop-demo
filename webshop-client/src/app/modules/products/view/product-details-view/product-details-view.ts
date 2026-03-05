@@ -25,7 +25,7 @@ export class ProductDetailsView {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthenticationService);
-  public $isAdmin = this.authService.isAdmin();
+  public $isAdmin = this.authService.$isAdmin;
   private productsService = inject(ProductsService);
   public $productId = signal(Number(this.route.snapshot.paramMap.get('id')));
   public productFromNavState = this.router.currentNavigation()?.extras?.state as Product; // Product details can be passed via router state when navigating to this view.

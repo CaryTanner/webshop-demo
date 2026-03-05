@@ -35,8 +35,8 @@ export class App {
   public $isMobile = this.handleMobile();
 
   private authService = inject(AuthenticationService);
-  public $isAdmin = this.authService.isAdmin();
-  public $isLoggedIn = this.authService.isLoggedIn();
+  public $isAdmin = this.authService.$isAdmin;
+  public $isLoggedIn = this.authService.$isLoggedIn;
 
   handleMobile() {
     return toSignal(

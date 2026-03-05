@@ -14,13 +14,14 @@ export class AuthenticationService {
   private router = inject(Router);
   private notificationService = inject(NotificationService);
   private _user = signal<User | null>(null);
+  public $user = this._user.asReadonly();
   private _expiresAt = signal<Date | null>(null);
-  public _isAdmin = computed(() => {
+  public $isAdmin = computed(() => {
     const user = this._user();
     return user?.isAdmin || false;
   });
 
-  public _isLoggedIn = computed(() => {
+  public $isLoggedIn = computed(() => {
     const user = this._user();
     const expiresAt = this._expiresAt();
     return !!user && !!expiresAt && expiresAt > new Date();
@@ -31,19 +32,7 @@ export class AuthenticationService {
     this.restoreSession();
   }
 
-  isAdmin() {
-    return this._isAdmin;
-  }
-
-  isLoggedIn() {
-    return this._isLoggedIn;
-  }
-
-  user() {
-    return this._user.asReadonly();
-  }
-
-  restoreSession() {
+  private restoreSession() {
     const token = localStorage.getItem('token');
     const expiresAt = localStorage.getItem('expires_at');
     const userStr = localStorage.getItem('user');

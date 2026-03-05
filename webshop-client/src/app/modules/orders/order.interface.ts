@@ -22,13 +22,21 @@ export enum OrderStatus {
   Cancelled = 'Cancelled',
 }
 
-export interface OrderItem {
-  id: number;
+export interface CartItem {
   quantity: number;
   unitPrice: number;
-  orderId: number;
   productId: number;
-  product?: Product;
+  product: Product;
+}
+
+export interface CartStorage {
+  items: CartItem[];
+  savedAt: string; // ISO date string
+}
+
+export interface OrderItem extends CartItem {
+  id: number;
+  orderId: number;
 }
 
 export interface Payment {

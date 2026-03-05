@@ -20,7 +20,7 @@ import { ROUTE_PATHS } from 'src/app/app.routes';
 export class ProductsView {
   private authService = inject(AuthenticationService);
   public createProductPath = ROUTE_PATHS.products['create'];
-  public $isAdmin = this.authService.isAdmin();
+  public $isAdmin = this.authService.$isAdmin;
   public productsService = inject(ProductsService);
   public queryProducts$ = new BehaviorSubject<GetProductsParams>({} as GetProductsParams);
   public products$ = this.getProducts();
