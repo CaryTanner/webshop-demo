@@ -1,12 +1,15 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { NotificationService } from '@common/services/notification/notification.service';
 import { AuthenticationService } from '@module/authentication/service/authentication-service';
+import { CartItem } from '@module/orders/order.interface';
+import { OrderService } from '@module/orders/service/order-service';
 import { Product } from '@module/products/product.interface';
 import { ProductsService } from '@module/products/service/products-service';
 import { of } from 'rxjs';
@@ -25,6 +28,8 @@ export class ProductDetailsView {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthenticationService);
+  private orderService = inject(OrderService);
+  private notificationService = inject(NotificationService);
   public $isAdmin = this.authService.$isAdmin;
   private productsService = inject(ProductsService);
   public $productId = signal(Number(this.route.snapshot.paramMap.get('id')));
@@ -39,9 +44,20 @@ export class ProductDetailsView {
       }),
     ),
   );
+  public $quantityInCart = computed(() => {
+    return this.setQuantityInCart(this.orderService.$cart());
+  });
 
   addToCart(product: Product) {
-    console.log('TODO-- return to products i missin id');
+    if (!product.id) return;
     console.log('Adding to cart:', product);
+    this.orderService.addItem(product);
+    this.notificationService.open('Product added', 'success');
+  }
+
+  setQuantityInCart(cartItems: CartItem[]) {
+    if (!cartItems?.length) return false;
+    const exists = cartItems.find((item) => item.productId === this.$productId());
+    return exists ? exists.quantity : 0;
   }
 }

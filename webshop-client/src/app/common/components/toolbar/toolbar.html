@@ -16,7 +16,7 @@
     matIconButton
     (click)="toggleCart.emit()"
   >
-    <mat-icon>shopping_cart</mat-icon>
+    <mat-icon [matBadge]="$numCartItems()" [matBadgeHidden]="!$hasItems()">shopping_cart</mat-icon>
   </button>
   <button
     type="button"

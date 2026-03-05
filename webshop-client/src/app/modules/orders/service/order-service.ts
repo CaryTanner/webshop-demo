@@ -1,11 +1,11 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import { CartItem, CartStorage } from '../order.interface';
-import { AuthenticationService } from '@module/authentication/service/authentication-service';
+import { Product } from '@module/products/product.interface';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private _cart = signal<CartItem[]>([]);
   public $cart = this._cart.asReadonly();
-  public numberOfItemsInCart = computed(() => {
+  public $numberCartItems = computed(() => {
     return this._cart()?.length;
   });
   private CART_KEY = 'cart_key';
@@ -60,18 +60,21 @@ export class OrderService {
       items: this._cart(),
       savedAt: new Date().toISOString(),
     };
-
+    console.log('saving cart', cartStorage)
     localStorage.setItem(this.CART_KEY, JSON.stringify(cartStorage));
   }
 
-  addItem(item: CartItem) {
+  addItem(product: Product) {
+    const exists = this._cart().find((item) => item.productId === product.id);
+    if (exists) {
+      console.log('exists', exists)
+      return this.updateItemQuantity(product.id, exists.quantity + 1);
+    }
     this._cart.update((currentCart) => {
-      return currentCart.map((cartItem) => {
-        if (cartItem.productId === item.productId) {
-          return { ...cartItem, quantity: cartItem.quantity + 1 };
-        }
-        return cartItem;
-      });
+      return [
+        ...currentCart,
+        { quantity: 1, unitPrice: product.price, productId: product.id, product },
+      ];
     });
   }
 

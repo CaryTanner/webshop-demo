@@ -11,6 +11,7 @@ import { ToolbarComponent } from '@common/components/toolbar/toolbar';
 import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ROUTE_PATHS } from './app.routes';
+import { OrderService } from '@module/orders/service/order-service';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,8 @@ export class App {
   public $isMobile = this.handleMobile();
 
   private authService = inject(AuthenticationService);
+  private orderService = inject(OrderService);
+  public $numberCartItems = this.orderService.$numberCartItems;
   public $isAdmin = this.authService.$isAdmin;
   public $isLoggedIn = this.authService.$isLoggedIn;
 

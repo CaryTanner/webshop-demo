@@ -6,6 +6,7 @@
       (toggleSideNav)="snav.toggle()"
       (toggleLogin)="toggleLogin()"
       [$isLoggedIn]="$isLoggedIn()"
+      [$numCartItems]="$numberCartItems()"
     />
   </mat-toolbar>
 
@@ -27,7 +28,9 @@
         <a mat-list-item [routerLink]="routePaths.authentication['base']" routerLinkActive="active"
           >Account</a
         >
-        <a mat-list-item [routerLink]="routePaths.orders['base']" routerLinkActive="active">Orders</a>
+        <a mat-list-item [routerLink]="routePaths.orders['base']" routerLinkActive="active"
+          >Orders</a
+        >
       </mat-nav-list>
     </mat-sidenav>
 
