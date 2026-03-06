@@ -1,12 +1,10 @@
 @use 'theme-colors' as theme;
 @use 'mixin' as mixin;
 :host {
-  .account-details-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2rem 0;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 0;
 
   div.card {
     @include mixin.app-card;

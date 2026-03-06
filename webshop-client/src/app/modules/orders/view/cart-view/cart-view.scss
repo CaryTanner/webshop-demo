@@ -2,57 +2,52 @@
 :host {
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex: 1 1 auto;
-  .cart-view-container {
-    padding-top: 2rem;
+  gap: 1rem;
+  padding-top: 2rem;
+  div:has(h2) {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    h2 {
+      margin: 0;
+    }
+  }
+  .empty-cart {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    text-align: center;
+    img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+    }
+    h3 {
+      margin: -0.8rem 0 0 0;
+      font-size: 1.5rem;
+      line-height: 1.7rem;
+      text-wrap: balance;
+    }
+    p {
+      max-width: 35ch;
+      font-size: 1rem;
+      margin: 1rem 0 3rem 0;
+    }
+    button {
+      @include mixin.cta-button;
+    }
+  }
+  .cart-content {
     flex: 1 1 auto;
-    div:has(h2) {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      h2 {
-        margin: 0;
-      }
-    }
-    .empty-cart {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      img {
-        width: 150px;
-        height: 150px;
-        object-fit: contain;
-      }
-      h3 {
-        margin: -0.8rem 0 0 0;
-        font-size: 1.5rem;
-        line-height: 1.7rem;
-        text-wrap: balance;
-      }
-      p {
-        max-width: 35ch;
-        font-size: 1rem;
-        margin: 1rem 0 3rem 0;
-      }
-      button {
-        @include mixin.cta-button;
-      }
-    }
-    .cart-content {
-      flex: 1 1 auto;
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1.5rem;
-    }
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
   }
 }

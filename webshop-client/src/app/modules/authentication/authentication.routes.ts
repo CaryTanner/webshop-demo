@@ -8,7 +8,7 @@ export const routes: Routes = [
   {
     path: authenticationRoutePaths.base,
     component: AccountView,
-    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [{ path: '', component: AccountDetails }],
   },
 ];

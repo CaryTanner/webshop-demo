@@ -1,15 +1,15 @@
 :host {
-  .product-form {
+  form {
     max-width: 500px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 16px;
     row-gap: 16px;
     margin: 3rem auto;
-  }
 
-  mat-form-field:not(.half-width) {
-    grid-column: span 2;
+    mat-form-field:not(.half-width) {
+      grid-column: span 2;
+    }
   }
 
   button {

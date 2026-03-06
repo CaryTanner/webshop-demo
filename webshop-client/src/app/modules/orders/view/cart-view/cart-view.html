@@ -1,29 +1,27 @@
-<div class="cart-view-container">
-  <div>
-    <h2>Shopping Cart</h2>
-    <mat-icon>shopping_cart</mat-icon>
-  </div>
-  @if ($numItemsInCart() === 0) {
-    <div class="empty-cart">
-      <img src="Resistor.svg" alt="Resistor icon" />
-      <h3>Haven't found anything you like yet?</h3>
-      <p>Try searching by your favourite category like Microcontrollers or Displays</p>
-      <button type="button" matButton="filled" [routerLink]="productsPath">Shop Components</button>
-    </div>
-  } @else {
-    <div class="cart-content">
-      <app-cart
-        [$items]="$cart()"
-        (quantityChangeEvent)="onQuantityChange($event)"
-        (deleteItemEvent)="onDeleteItem($event)"
-      />
-      <app-item-total
-        [$total]="$cartTotal()"
-        [$tax]="0"
-        [$shipping]="0"
-        [$actionText]="'Proceed to checkout'"
-        ($actionEmission)="onProceedToCheckout()"
-      />
-    </div>
-  }
+<div>
+  <h2>Shopping Cart</h2>
+  <mat-icon>shopping_cart</mat-icon>
 </div>
+@if ($numItemsInCart() === 0) {
+  <div class="empty-cart">
+    <img src="Resistor.svg" alt="Resistor icon" />
+    <h3>Haven't found anything you like yet?</h3>
+    <p>Try searching by your favourite category like Microcontrollers or Displays</p>
+    <button type="button" matButton="filled" [routerLink]="productsPath">Shop Components</button>
+  </div>
+} @else {
+  <div class="cart-content">
+    <app-cart
+      [$items]="$cart()"
+      (quantityChangeEvent)="onQuantityChange($event)"
+      (deleteItemEvent)="onDeleteItem($event)"
+    />
+    <app-item-total
+      [$total]="$cartTotal()"
+      [$tax]="0"
+      [$shipping]="0"
+      [$actionText]="'Proceed to checkout'"
+      ($actionEmission)="onProceedToCheckout()"
+    />
+  </div>
+}
