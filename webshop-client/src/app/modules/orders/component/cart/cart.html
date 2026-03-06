@@ -1,34 +1,40 @@
-<form [formGroup]="form">
+<form [formGroup]="$form()" [class.single-column]="$isReadonly()">
   <ng-container formArrayName="items">
     @for (itemGroup of itemsArr.controls; track itemGroup; let idx = $index) {
       <app-product-card [$product]="itemsArr.at(idx).get('product')?.value" [$isInCart]="true" />
-      <div class="controls-container" [formGroupName]="idx">
+      <div class="controls-container"  [formGroupName]="idx">
         <mat-form-field subscriptSizing="dynamic">
-          <mat-select
-            formControlName="quantity"
-            (selectionChange)="onQuantityChange($event, idx)"
-            [panelWidth]="'fit-content'"
-          >
-            @for (num of selectNumbers; track num) {
-              <mat-option
-                [value]="num"
-                [disabled]="
-                  num >
-                  itemsArr.at(idx).get('product')?.value?.stock +
-                    itemsArr.at(idx).get('quantity')?.value
-                "
-                >{{ num }}</mat-option
-              >
-            }
-          </mat-select>
+          @if (!$isReadonly()) {
+            <mat-select
+              formControlName="quantity"
+              (selectionChange)="onQuantityChange($event, idx)"
+              [panelWidth]="'fit-content'"
+            >
+              @for (num of selectNumbers; track num) {
+                <mat-option
+                  [value]="num"
+                  [disabled]="
+                    num >
+                    itemsArr.at(idx).get('product')?.value?.stock +
+                      itemsArr.at(idx).get('quantity')?.value
+                  "
+                  >{{ num }}</mat-option
+                >
+              }
+            </mat-select>
+          } @else {
+            <input matInput formControlName="quantity" type="number" readonly />
+          }
         </mat-form-field>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onDeleteItem(idx, itemsArr.at(idx).get('productId')?.value)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
+        @if (!$isReadonly()) {
+          <button
+            type="button"
+            mat-icon-button
+            (click)="onDeleteItem(idx, itemsArr.at(idx).get('productId')?.value)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
       </div>
     }
   </ng-container>

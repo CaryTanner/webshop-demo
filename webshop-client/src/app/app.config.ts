@@ -11,7 +11,14 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './common/interceptors/auth-interceptor';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { CustomErrorHandler } from '@common/services/error/error-handler';
-import { categories, PRODUCT_CATEGORIES, SVG_TYPES, svgTypes } from '@common/injection-tokens';
+import {
+  categories,
+  EU_COUNTRIES,
+  euCountries,
+  PRODUCT_CATEGORIES,
+  SVG_TYPES,
+  svgTypes,
+} from '@common/injection-tokens';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,5 +35,6 @@ export const appConfig: ApplicationConfig = {
     // Injection Tokens
     { provide: SVG_TYPES, useValue: svgTypes },
     { provide: PRODUCT_CATEGORIES, useValue: categories },
+    { provide: EU_COUNTRIES, useValue: euCountries },
   ],
 };

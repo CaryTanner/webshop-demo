@@ -1,0 +1,18 @@
+<div>
+  <app-cart [$items]="$items()" [$form]="$form()" [$isReadonly]="true" />
+  <div>
+    <h3>Need to make changes?</h3>
+    <button type="button" matButton="outlined" [routerLink]="cartPath">Go back to cart</button>
+  </div>
+</div>
+<app-item-total>
+  <button
+    type="button"
+    matButton="filled"
+    color="primary"
+    class="cta-button"
+    (click)="submitEmission.emit()"
+  >
+    Proceed to shipping
+  </button>
+</app-item-total>

@@ -1,8 +1,8 @@
 <div class="item-total-card">
-  <div class="totals-row">
+  <div class="totals-row" aria-live="polite" aria-atomic="true">
     <div>
       <span>Subtotal</span>
-      <span>{{ $total() | number: '1.2-2' }}</span>
+      <span>{{ $cartTotal() | number: '1.2-2' }}</span>
     </div>
     <div>
       <span>Tax</span>
@@ -18,19 +18,8 @@
     </div>
     <div>
       <span>Total</span>
-      <span>{{ $total() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
+      <span>{{ $cartTotal() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
     </div>
   </div>
-  <ng-content>
-    <button
-      type="button"
-      matButton="filled"
-      color="primary"
-      class="cta-button"
-      [disabled]="$actionDisabled()"
-      (click)="$actionEmission.emit()"
-    >
-      {{ $actionText() }}
-    </button>
-  </ng-content>
+  <ng-content> </ng-content>
 </div>

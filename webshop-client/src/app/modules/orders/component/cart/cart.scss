@@ -14,6 +14,12 @@
         justify-self: end;
       }
     }
+    &.single-column {
+      grid-template-columns: 6fr 1fr;
+      .controls-container {
+        grid-template-columns: 1fr;
+      }
+    }
   }
 
   @media (max-width: 600px) {

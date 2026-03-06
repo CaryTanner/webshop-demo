@@ -1,1 +1,32 @@
-<p>checkout-view works!</p>
+<div>
+  <h2>Checkout</h2>
+  <mat-icon>shopping_cart_checkout</mat-icon>
+</div>
+
+<mat-tab-group [animationDuration]="'0ms'" fitInkBarToContent>
+  <mat-tab label="Review items">
+    <ng-template matTabContent>
+      <app-review-items [$items]="$cart()" [$form]="form.controls.orderItems" />
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Shipping">
+    <ng-template matTabContent>
+      <app-shipping-form
+        [$countries]="euCountries"
+        [$methods]="shippingMethods"
+        [$form]="form.controls.shipping"
+      />
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Payment">
+    <ng-template matTabContent>
+      <app-payment-form [$methods]="paymentMethods" [$form]="form.controls.payment" />
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+@if ($canViewConfirm()) {
+  <app-confirm-order />
+}
+
+

@@ -1,19 +1,17 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { OrderService } from '@module/orders/service/order-service';
 
 @Component({
   selector: 'app-item-total',
-  imports: [CurrencyPipe, MatButtonModule, DecimalPipe],
+  imports: [CurrencyPipe, DecimalPipe],
   templateUrl: './item-total.html',
   styleUrl: './item-total.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemTotal {
-  $total = input<number>(0);
-  $tax = input<number>(0);
-  $shipping = input<number | string>(0);
-  $actionText = input<string>('Proceed to checkout');
-  $actionDisabled = input<boolean>(false);
-  $actionEmission = output<void>();
+  private orderService = inject(OrderService);
+  public $cartTotal = this.orderService.$cartTotal;
+  $tax = signal<number>(0);
+  $shipping = signal<number | string>(0);
 }

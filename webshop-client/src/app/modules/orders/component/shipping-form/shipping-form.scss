@@ -1,0 +1,28 @@
+@use 'mixin' as mixin;
+:host {
+  @include mixin.flex-column-fill();
+  height: 100%;
+  box-sizing: border-box;
+  padding: 2rem 0;
+  form {
+    @include mixin.flex-column-fill();
+    .grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      .full-width {
+        grid-column: span 2;
+      }
+      @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  button.cta-button {
+    @include mixin.cta-button;
+    width: 100%;
+  }
+}

@@ -3,7 +3,7 @@
   <h1>Product details</h1>
 
   <div>
-    <mat-chip>Quantity in cart: {{ $quantityInCart() }} </mat-chip>
+    <mat-chip aria-live="polite">Quantity in cart: {{ $quantityInCart() }} </mat-chip>
 
     @if ($isAdmin()) {
       <button type="button" matButton="filled" [routerLink]="prodEditPath + $productId()">

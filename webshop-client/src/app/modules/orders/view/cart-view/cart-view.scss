@@ -1,10 +1,6 @@
 @use 'mixin' as mixin;
 :host {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1 1 auto;
-  gap: 1rem;
+  @include mixin.flex-column-fill(1rem, flex-start);
   padding-top: 2rem;
   div:has(h2) {
     display: flex;
@@ -14,6 +10,9 @@
     h2 {
       margin: 0;
     }
+  }
+  button.cta-button {
+    @include mixin.cta-button;
   }
   .empty-cart {
     display: flex;
@@ -36,18 +35,15 @@
       font-size: 1rem;
       margin: 1rem 0 3rem 0;
     }
-    button {
-      @include mixin.cta-button;
-    }
   }
   .cart-content {
-    flex: 1 1 auto;
-    width: 100%;
+    @include mixin.flex-column-fill(1.5rem);
     max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+
     gap: 1.5rem;
+    button.cta-button {
+      margin-top: 1rem;
+      width: 100%;
+    }
   }
 }

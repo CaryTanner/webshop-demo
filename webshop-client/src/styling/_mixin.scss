@@ -76,3 +76,13 @@
   font-weight: 600;
   letter-spacing: 0.5px;
 }
+
+@mixin flex-column-fill ($gap: 2.5rem, $justify: space-between) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: $justify;
+  gap: $gap;
+  width: 100%;
+  flex: 1 1 auto;
+}

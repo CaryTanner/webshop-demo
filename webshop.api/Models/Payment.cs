@@ -7,8 +7,8 @@ public class Payment
 
     public required int OrderId { get; set; }
     public required Order Order { get; set; }
+    public bool PaymentOnDelivery { get; set; } = false;
 }
-
 public enum PaymentMethod
 {
     Klarna,

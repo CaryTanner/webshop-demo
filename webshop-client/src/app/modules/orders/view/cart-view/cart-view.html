@@ -7,7 +7,9 @@
     <img src="Resistor.svg" alt="Resistor icon" />
     <h3>Haven't found anything you like yet?</h3>
     <p>Try searching by your favourite category like Microcontrollers or Displays</p>
-    <button type="button" matButton="filled" [routerLink]="productsPath">Shop Components</button>
+    <button class="cta-button" type="button" matButton="filled" [routerLink]="productsPath">
+      Shop Components
+    </button>
   </div>
 } @else {
   <div class="cart-content">
@@ -16,12 +18,16 @@
       (quantityChangeEvent)="onQuantityChange($event)"
       (deleteItemEvent)="onDeleteItem($event)"
     />
-    <app-item-total
-      [$total]="$cartTotal()"
-      [$tax]="0"
-      [$shipping]="0"
-      [$actionText]="'Proceed to checkout'"
-      ($actionEmission)="onProceedToCheckout()"
-    />
+    <app-item-total>
+      <button
+        type="button"
+        matButton="filled"
+        color="primary"
+        class="cta-button"
+        [routerLink]="checkoutPath"
+      >
+        Proceed to checkout
+      </button>
+    </app-item-total>
   </div>
 }

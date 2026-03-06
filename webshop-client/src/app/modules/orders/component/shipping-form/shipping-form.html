@@ -1,0 +1,66 @@
+<form [formGroup]="$form()">
+  <div class="grid">
+    <mat-form-field class="full-width">
+      <mat-label>Full name</mat-label>
+      <input matInput formControlName="fullName" required />
+      @if ($form().get('fullName')?.hasError('required')) {
+        <mat-error>Full name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" required />
+      @if ($form().get('address')?.hasError('required')) {
+        <mat-error>Address is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>City</mat-label>
+      <input matInput formControlName="city" required />
+      @if ($form().get('city')?.hasError('required')) {
+        <mat-error>City is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Postal code</mat-label>
+      <input matInput formControlName="postalCode" required />
+      @if ($form().get('postalCode')?.hasError('required')) {
+        <mat-error>Postal code is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Country</mat-label>
+      <mat-select formControlName="country" required>
+        @for (country of $countries(); track country) {
+          <mat-option [value]="country">{{ country }}</mat-option>
+        }
+      </mat-select>
+      @if ($form().get('country')?.hasError('required')) {
+        <mat-error>Country is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Shipping method</mat-label>
+      <mat-select formControlName="method">
+        @for (method of $methods(); track method) {
+          <mat-option [value]="method">{{ method }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <button
+    matButton="filled"
+    type="button"
+    class="cta-button"
+    [disabled]="$form().invalid"
+    (click)="submitEmission.emit()"
+  >
+    Proceed to payment
+  </button>
+</form>

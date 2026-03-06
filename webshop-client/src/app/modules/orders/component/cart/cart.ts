@@ -1,81 +1,13 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
-import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import {
-  CartItem,
-  Order,
-  OrderItem,
-  OrderStatus,
-  PaymentMethod,
-  PaymentStatus,
-  ShippingMethod,
-} from '@module/orders/order.interface';
-import { OrderService } from '@module/orders/service/order-service';
+import { CartItem, OrderItem } from '@module/orders/order.interface';
 import { ProductCard } from '@module/products/components/product-card/product-card';
-import { ProductsList } from '@module/products/components/products-list/products-list';
-import { Product } from '@module/products/product.interface';
-
-const mockProducts = [
-  {
-    id: 9,
-    name: '0.1µF Bypass Capacitor',
-    description: 'Decoupling capacitor for power lines',
-    price: 2.0,
-    stock: 400,
-    svgType: 'Capacitor',
-    categories: [
-      {
-        id: 2,
-        name: 'Capacitors',
-      },
-      {
-        id: 10,
-        name: 'Passive Components',
-      },
-    ],
-  },
-  {
-    id: 10,
-    name: '1000µF Electrolytic Capacitor',
-    description: 'Large smoothing capacitor 16V',
-    price: 6.0,
-    stock: 150,
-    svgType: 'Capacitor',
-    categories: [
-      {
-        id: 2,
-        name: 'Capacitors',
-      },
-      {
-        id: 10,
-        name: 'Passive Components',
-      },
-    ],
-  },
-  {
-    id: 11,
-    name: '100µH Inductor',
-    description: 'Small signal inductor',
-    price: 5.0,
-    stock: 200,
-    svgType: 'Inductor',
-    categories: [
-      {
-        id: 3,
-        name: 'Inductors',
-      },
-      {
-        id: 10,
-        name: 'Passive Components',
-      },
-    ],
-  },
-] as Product[];
 
 @Component({
   selector: 'app-cart',
@@ -95,19 +27,20 @@ const mockProducts = [
 })
 export class Cart {
   fb = inject(FormBuilder);
+  public defaultForm = this.fb.group({
+    items: this.fb.array([]),
+  });
+  // can accept a parent component form if provided
+  public $form = input(this.defaultForm);
   $items = input<CartItem[] | OrderItem[]>();
   deleteItemEvent = output<number>();
   quantityChangeEvent = output<{ productId: number; quantity: number }>();
-  public form = this.fb.group({
-    orderId: null,
-    status: OrderStatus.Draft,
-    userId: null,
-    items: this.fb.array([]),
-  });
+
+  public $isReadonly = input(false);
   public selectNumbers = Array.from({ length: 99 }, (_, i) => i + 1);
 
   get itemsArr() {
-    return (this.form?.get('items') as FormArray) ?? this.fb.array([]);
+    return (this.$form()?.get('items') as FormArray) ?? this.fb.array([]);
   }
 
   constructor() {
@@ -124,7 +57,7 @@ export class Cart {
   }
 
   addAndPatchItem(item: CartItem | OrderItem) {
-    this.itemsArr.push(
+    this.itemsArr?.push(
       this.fb.group({
         id: 'id' in item ? (item as OrderItem).id : null,
         quantity: item.quantity,
@@ -144,7 +77,7 @@ export class Cart {
   onQuantityChange(event: MatSelectChange, idx: number) {
     const productId = this.itemsArr.at(idx).get('productId')?.value;
     const quantity = event.value;
-    if (productId != null && quantity != null) {
+    if (productId !== null && quantity !== null) {
       this.quantityChangeEvent.emit({ productId, quantity });
     }
   }

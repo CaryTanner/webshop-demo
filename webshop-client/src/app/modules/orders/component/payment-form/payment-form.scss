@@ -1,0 +1,24 @@
+@use 'mixin' as mixin;
+
+:host {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 2rem 0;
+  @include mixin.flex-column-fill();
+  form {
+    @include mixin.flex-column-fill();
+    div:has(mat-form-field) {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      .mat-mdc-checkbox {
+        align-self: center;
+      }
+    }
+  }
+
+  button.cta-button {
+    @include mixin.cta-button;
+    width: 100%;
+  }
+}

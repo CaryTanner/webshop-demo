@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class CartView {
   public productsPath = ROUTE_PATHS.products['base'];
+  public checkoutPath = ROUTE_PATHS.orders['checkout'];
   private orderService = inject(OrderService);
   public $cart = this.orderService.$cart;
   public $cartTotal = this.orderService.$cartTotal;
@@ -27,10 +28,5 @@ export class CartView {
 
   onDeleteItem(productId: number) {
     this.orderService.removeItem(productId);
-  }
-
-  onProceedToCheckout() {
-    //TODO navigate to checkout page
-    console.log('proceeding to checkout');
   }
 }

@@ -28,11 +28,14 @@ public class OrdersController : ControllerBase
                 return Unauthorized();
             query = query.Where(o => o.UserId == userId);
         }
+        var now = DateTime.UtcNow;
         var orders = await query
+            .Where(o => !(o.Status == OrderStatus.Draft && o.CreatedAt < now.AddHours(-24)))
             .Select(o => new
             {
                 o.Id,
                 o.CreatedAt,
+                o.ExpiresAt,
                 o.Status,
                 o.UserId,
                 User = o.User == null ? null : new { o.User.Id, o.User.Email },
@@ -46,6 +49,7 @@ public class OrdersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Order>> GetOrder(int id)
     {
+        var now = DateTime.UtcNow;
         var order = await _context.Orders
             .Include(o => o.User)
             .Include(o => o.Items)
@@ -53,6 +57,8 @@ public class OrdersController : ControllerBase
             .Include(o => o.Shipping)
             .FirstOrDefaultAsync(o => o.Id == id);
         if (order == null)
+            return NotFound();
+        if (order.Status == OrderStatus.Draft && order.CreatedAt < now.AddHours(-24))
             return NotFound();
         return order;
     }
@@ -63,6 +69,7 @@ public class OrdersController : ControllerBase
     {
         // Status defaults to Draft (model default)
         order.Status = OrderStatus.Draft;
+        order.ExpiresAt = DateTime.UtcNow.AddHours(24);
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, order);
@@ -91,6 +98,12 @@ public class OrdersController : ControllerBase
                 _context.OrderItems.Remove(item);
             }
             order.Items = order.Items.Where(i => i.Quantity > 0).ToList();
+        }
+
+        // Reset ExpiresAt if order is still Draft
+        if (order.Status == OrderStatus.Draft)
+        {
+            order.ExpiresAt = DateTime.UtcNow.AddHours(24);
         }
 
         _context.Entry(order).State = EntityState.Modified;

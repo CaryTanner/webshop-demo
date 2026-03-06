@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace webshop.api.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20260306103434_AddPaymentOnDeliveryToPayment")]
+    partial class AddPaymentOnDeliveryToPayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -457,9 +460,6 @@ namespace webshop.api.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -1080,14 +1080,14 @@ namespace webshop.api.Migrations
                             Id = 1,
                             Email = "admin.one@cgitest.com",
                             IsAdmin = true,
-                            PasswordHash = "$2a$11$fv2kOac4MYeKsRNEVpCbBuKaIpjyXFKOIiwomvHwttpsA7Ev1GPH."
+                            PasswordHash = "$2a$11$ye2VU7LaE9bLWIGsfeOXVeYaPj40M6e2oTGpnqV7cif/UB5MyT21C"
                         },
                         new
                         {
                             Id = 2,
                             Email = "not.admin@cgitest.com",
                             IsAdmin = false,
-                            PasswordHash = "$2a$11$se.w64uK/PN7JeoFRGesVOgQDjISA71kgZriDer9NiWCEHgfbw38."
+                            PasswordHash = "$2a$11$cOBTgDGAS7guPOuhYiKUxOumg6mBiKF8CwzzCdD9g/Z/bDyRGN1zS"
                         });
                 });
 

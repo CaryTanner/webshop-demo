@@ -34,3 +34,35 @@ export const categories: Category[] = [
 export const PRODUCT_CATEGORIES = new InjectionToken<Category[]>(
   'Unique product categories used throughout the application.',
 );
+
+export const euCountries = [
+  'Austria',
+  'Belgium',
+  'Bulgaria',
+  'Croatia',
+  'Cyprus',
+  'Czech Republic',
+  'Denmark',
+  'Estonia',
+  'Finland',
+  'France',
+  'Germany',
+  'Greece',
+  'Hungary',
+  'Ireland',
+  'Italy',
+  'Latvia',
+  'Lithuania',
+  'Luxembourg',
+  'Malta',
+  'Netherlands',
+  'Poland',
+  'Portugal',
+  'Romania',
+  'Slovakia',
+  'Slovenia',
+  'Spain',
+  'Sweden',
+];
+
+export const EU_COUNTRIES = new InjectionToken<string[]>(' EU countries for shipping ');

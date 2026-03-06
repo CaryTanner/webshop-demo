@@ -2,6 +2,7 @@ public class Order
 {
     public int Id { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? ExpiresAt { get; set; }
     public OrderStatus Status { get; set; } = OrderStatus.Draft;
 
     public int? UserId { get; set; }

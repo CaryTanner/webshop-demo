@@ -1,0 +1,26 @@
+<form [formGroup]="$form()">
+  <div>
+    <mat-form-field>
+      <mat-label>Payment method</mat-label>
+      <mat-select formControlName="method" required>
+        @for (method of $methods(); track method) {
+          <mat-option [value]="method">
+            {{ method }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="paymentOnDelivery">Payment on delivery</mat-checkbox>
+  </div>
+
+  <button
+    matButton="filled"
+    class="cta-button"
+    type="submit"
+    (click)="submitEmission.emit()"
+    [disabled]="!$form().valid"
+  >
+    Confirm order
+  </button>
+</form>
