@@ -58,7 +58,7 @@
       }
 
       button {
-        @include mixin.cta-button;
+        @include mixin.cta-button();
         align-self: flex-start;
         @media (max-width: 900px) {
           align-self: center;

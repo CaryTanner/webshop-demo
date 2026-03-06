@@ -12,7 +12,7 @@
     }
   }
   button.cta-button {
-    @include mixin.cta-button;
+    @include mixin.cta-button();
   }
   .empty-cart {
     display: flex;

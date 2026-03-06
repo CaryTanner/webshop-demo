@@ -7,7 +7,7 @@
   padding: 3rem 0;
 
   div.card {
-    @include mixin.app-card;
+    @include mixin.app-card();
 
     .card-body {
       display: flex;

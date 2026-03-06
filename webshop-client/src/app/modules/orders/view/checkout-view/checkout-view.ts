@@ -39,7 +39,7 @@ export class CheckoutView {
   public euCountries = inject(EU_COUNTRIES);
   private orderService = inject(OrderService);
   public $cart = this.orderService.$cart;
-  private sweden = this.euCountries.indexOf('Sweden') !== -1 ? 'Sweden' : this.euCountries[0];
+  private sweden = this.euCountries.find((c) => c === 'Sweden');
   public paymentMethods = ['Klarna', 'Stripe', 'PayPal'];
   public shippingMethods = ['PostNord', 'DHL', 'Bring'];
   public STEPS: CheckoutStep[] = ['items', 'shipping', 'payment', 'confirm'];
@@ -47,9 +47,6 @@ export class CheckoutView {
   public form = this.buildForm();
   public $currentStep = signal<CheckoutStep>('items');
   public $completedSteps = signal<Set<CheckoutStep>>(new Set());
-  public $canGoBack = computed(() => {
-    return this.STEPS.indexOf(this.$currentStep()) > 0;
-  });
   public $canViewShipping = computed(() => {
     return this.$completedSteps().has('items');
   });
