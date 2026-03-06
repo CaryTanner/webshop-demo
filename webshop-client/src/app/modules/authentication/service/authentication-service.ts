@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { LoginResponse, User } from '../authentication.interface';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of, throwError } from 'rxjs';
@@ -15,21 +15,17 @@ export class AuthenticationService {
   private notificationService = inject(NotificationService);
   private _user = signal<User | null>(null);
   public $user = this._user.asReadonly();
-  private _expiresAt = signal<Date | null>(null);
-  public $isAdmin = computed(() => {
-    const user = this._user();
-    return user?.isAdmin || false;
-  });
-
-  public $isLoggedIn = computed(() => {
-    const user = this._user();
-    const expiresAt = this._expiresAt();
-    return !!user && !!expiresAt && expiresAt > new Date();
-  });
+  public $isAdmin = computed(() => !!this._user()?.isAdmin && !this.isUserSessionExpired());
+  public $isLoggedIn = computed(() => !!this._user() && !this.isUserSessionExpired());
 
   constructor() {
     // will maintain state if user refreshes or returns to app with valid session
     this.restoreSession();
+
+    effect(() => {
+      const user = this._user();
+      this.handleLocalStorage(user);
+    });
   }
 
   private restoreSession() {
@@ -39,22 +35,37 @@ export class AuthenticationService {
 
     if (token && expiresAt && userStr) {
       const expiresAtDate = new Date(expiresAt);
-      if (expiresAtDate > new Date()) {
-        const userData = JSON.parse(userStr);
-        this._user.set({ email: userData.email, isAdmin: userData.isAdmin, id: userData.userId });
+      if (!isNaN(expiresAtDate.getTime()) && expiresAtDate > new Date()) {
+        try {
+          const userData = JSON.parse(userStr);
+          this._user.set(userData);
+        } catch {
+          // eslint-disable-next-line no-console
+          console.info('User storage string invalid');
+          this.logout(false);
+        }
       } else {
-        this.logout();
+        this.logout(false);
       }
     }
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expires_at');
-    localStorage.removeItem('user');
+  isUserSessionExpired(): boolean {
+    const user = this._user();
+    if (!user || !user.expiresAt) return true;
+
+    const expiresAtDate = new Date(user.expiresAt);
+    if (isNaN(expiresAtDate.getTime())) return true; // invalid date
+
+    return expiresAtDate < new Date();
+  }
+
+  logout(showNotification = true) {
     this._user.set(null);
     this.router.navigateByUrl('/');
-    this.notificationService.open('Logged out successfully', 'success');
+    if (showNotification) {
+      this.notificationService.open('Logged out successfully', 'success');
+    }
   }
 
   login({ email, password }: { email: string; password: string }) {
@@ -65,15 +76,7 @@ export class AuthenticationService {
           throw new Error('Login failed');
         }
 
-        localStorage.setItem('token', resp.token);
-        localStorage.setItem('expires_at', resp.expiresAt);
-        localStorage.setItem(
-          'user',
-          JSON.stringify({ email: resp.email, isAdmin: resp.isAdmin, userId: resp.userId }),
-        );
-
-        this._user.set({ email: resp.email, isAdmin: resp.isAdmin, id: resp.userId });
-        this._expiresAt.set(new Date(resp.expiresAt));
+        this._user.set(resp);
 
         return of(true); // complete the observable with a success value, data access via signals
       }),
@@ -81,6 +84,18 @@ export class AuthenticationService {
         return throwError(() => err);
       }),
     );
+  }
+
+  handleLocalStorage(user: User | null) {
+    if (user) {
+      localStorage.setItem('token', user.token);
+      localStorage.setItem('expires_at', user.expiresAt);
+      localStorage.setItem('user', JSON.stringify(user));
+      return;
+    }
+    localStorage.removeItem('token');
+    localStorage.removeItem('expires_at');
+    localStorage.removeItem('user');
   }
 
   testJwt() {

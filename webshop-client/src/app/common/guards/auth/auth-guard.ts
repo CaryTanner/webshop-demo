@@ -4,7 +4,8 @@ import { AuthenticationService } from '@module/authentication/service/authentica
 import { ROUTE_PATHS } from 'src/app/app.routes';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const $isLoggedIn = inject(AuthenticationService).$isLoggedIn;
+  const authService = inject(AuthenticationService);
+  const $isLoggedIn = authService.$isLoggedIn;
   const router = inject(Router);
   if (!$isLoggedIn()) {
     return router.createUrlTree([ROUTE_PATHS.app['login']], {

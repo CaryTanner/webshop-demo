@@ -62,7 +62,6 @@
 @mixin app-card() {
   width: 100%;
   max-width: 540px;
-  padding: 2rem 2rem 1.5rem 2rem;
   border-radius: 20px;
   box-shadow: var(--mat-elevation-shadow-4);
   background: var(--mat-sys-surface, #fff);

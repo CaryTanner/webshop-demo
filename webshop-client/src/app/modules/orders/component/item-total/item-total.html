@@ -1,14 +1,14 @@
 <div class="item-total-card">
-  <div>
-    <div class="totals-row">
+  <div class="totals-row">
+    <div>
       <span>Subtotal</span>
       <span>{{ $total() | number: '1.2-2' }}</span>
     </div>
-    <div class="totals-row">
+    <div>
       <span>Tax</span>
       <span>{{ $tax() | number: '1.2-2' }}</span>
     </div>
-    <div class="totals-row">
+    <div>
       <span>Shipping</span>
       @if (typeof $shipping() === 'number') {
         {{ $shipping() | number: '1.2-2' }}
@@ -16,7 +16,7 @@
         {{ $shipping() }}
       }
     </div>
-    <div class="totals-row">
+    <div>
       <span>Total</span>
       <span>{{ $total() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
     </div>

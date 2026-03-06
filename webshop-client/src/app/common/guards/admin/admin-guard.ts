@@ -4,7 +4,8 @@ import { NotificationService } from '@common/services/notification/notification.
 import { AuthenticationService } from '@module/authentication/service/authentication-service';
 
 export const adminGuard: CanActivateFn = () => {
-  const $isAdmin = inject(AuthenticationService).$isAdmin;
+  const authService = inject(AuthenticationService);
+  const $isAdmin = authService.$isAdmin;
   const notificationService = inject(NotificationService);
   const router = inject(Router);
   if (!$isAdmin()) {

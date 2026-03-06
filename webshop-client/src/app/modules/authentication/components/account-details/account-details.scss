@@ -40,13 +40,17 @@
         flex-direction: column;
         gap: 0.3rem;
 
-        .label {
-          font-weight: 600;
-          color: theme.$text-secondary;
-          margin-right: 0.5rem;
-        }
-        .value {
-          color: theme.$text-tertiary;
+        > div {
+          // label
+          span:first-of-type {
+            font-weight: 600;
+            color: theme.$text-secondary;
+            margin-right: 0.5rem;
+          }
+          // value
+          span {
+            color: theme.$text-tertiary;
+          }
         }
       }
     }

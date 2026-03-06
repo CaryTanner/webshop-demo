@@ -2,13 +2,15 @@
 <div>
   <h1>Product details</h1>
 
-  <mat-chip>Quantity in cart: {{ $quantityInCart() }} </mat-chip>
+  <div>
+    <mat-chip>Quantity in cart: {{ $quantityInCart() }} </mat-chip>
 
-  @if ($isAdmin()) {
-    <button type="button" matButton="filled" [routerLink]="prodEditPath + $productId()">
-      Edit product
-    </button>
-  }
+    @if ($isAdmin()) {
+      <button type="button" matButton="filled" [routerLink]="prodEditPath + $productId()">
+        Edit product
+      </button>
+    }
+  </div>
 </div>
 @if (product; as p) {
   <section class="product-details-container">

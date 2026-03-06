@@ -1,7 +1,12 @@
-export interface User {
-  id: number;
-  email: string;
+export interface LoginResponse {
+  token: string; // JWT
+  expiresAt: string; // ISO date string
   isAdmin: boolean;
+  email: string;
+  userId: number;
+}
+
+export interface User extends LoginResponse {
   name?: string;
   address?: string;
 }
@@ -9,14 +14,6 @@ export interface User {
 export interface LoginRequest {
   email: string;
   password: string;
-}
-
-export interface LoginResponse {
-  token: string;
-  expiresAt: string; // ISO date string ?
-  isAdmin: boolean;
-  email: string;
-  userId: number;
 }
 
 // Generic API response wrapper

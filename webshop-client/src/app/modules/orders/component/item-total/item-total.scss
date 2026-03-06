@@ -11,7 +11,8 @@
       margin-top: 1rem;
       width: 100%;
     }
-    .totals-row {
+
+    div.totals-row > div {
       display: flex;
       justify-content: space-between;
       font-weight: 500;

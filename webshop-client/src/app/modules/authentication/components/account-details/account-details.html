@@ -6,26 +6,26 @@
       <h2>Welcome back</h2>
       <div class="info">
         <div>
-          <span class="label">Email:</span>
-          <span class="value">{{ $user()?.email }}</span>
+          <span>Email:</span>
+          <span>{{ $user()?.email }}</span>
         </div>
         <div>
-          <span class="label">Name:</span>
-          <span class="value">{{ $user()?.name || '—' }}</span>
+          <span>Name:</span>
+          <span>{{ $user()?.name || '—' }}</span>
         </div>
         <div>
-          <span class="label">Address:</span>
-          <span class="value">{{ '—' }}</span>
+          <span>Address:</span>
+          <span>{{ '—' }}</span>
         </div>
         @if ($user()?.isAdmin) {
           <div>
-            <span class="label">Role:</span>
-            <span class="value"> Admin </span>
+            <span>Role:</span>
+            <span> Admin </span>
           </div>
         } @else {
           <div>
-            <span class="label">Membership:</span>
-            <span class="value"> Premium </span>
+            <span>Membership:</span>
+            <span> Premium </span>
           </div>
         }
       </div>
