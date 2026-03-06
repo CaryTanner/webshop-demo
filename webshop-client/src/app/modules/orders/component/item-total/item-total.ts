@@ -12,8 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class ItemTotal {
   $total = input<number>(0);
   $tax = input<number>(0);
-  $shipping = input<number | string>('Free!');
-  $actionText = input<string>('Proceed to Checkout');
+  $shipping = input<number | string>(0);
+  $actionText = input<string>('Proceed to checkout');
   $actionDisabled = input<boolean>(false);
   $actionEmission = output<void>();
 }

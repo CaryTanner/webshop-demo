@@ -10,21 +10,27 @@
     </div>
     <div class="totals-row">
       <span>Shipping</span>
-      <span>{{ $shipping() }}</span>
+      @if (typeof $shipping() === 'number') {
+        {{ $shipping() | number: '1.2-2' }}
+      } @else {
+        {{ $shipping() }}
+      }
     </div>
     <div class="totals-row">
       <span>Total</span>
-      <span>{{ $total() + $tax() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
+      <span>{{ $total() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
     </div>
   </div>
-  <button
-    type="button"
-    matButton="filled"
-    color="primary"
-    class="cta-button"
-    [disabled]="$actionDisabled()"
-    (click)="$actionEmission.emit()"
-  >
-    {{ $actionText() }}
-  </button>
+  <ng-content>
+    <button
+      type="button"
+      matButton="filled"
+      color="primary"
+      class="cta-button"
+      [disabled]="$actionDisabled()"
+      (click)="$actionEmission.emit()"
+    >
+      {{ $actionText() }}
+    </button>
+  </ng-content>
 </div>

@@ -8,7 +8,7 @@
     gap: 1rem;
     h1 {
       margin-bottom: 0;
-      flex: 1
+      flex: 1;
     }
     margin-bottom: 1rem;
   }
@@ -71,13 +71,11 @@
         .stock {
           font-size: 1rem;
           font-weight: 500;
-          color: theme.$text-tertiary;
-        }
-        .in-stock {
           color: theme.$success-color;
-        }
-        .out-of-stock {
-          color: theme.$error-color;
+
+          &.out-of-stock {
+            color: theme.$error-color;
+          }
         }
       }
 

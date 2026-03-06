@@ -14,10 +14,8 @@ export class LoginRequired {
   private $params = signal(this.route.snapshot.queryParams);
   public $message = computed(() => {
     const section = this.$params()?.['redirectUrl']?.split('/')[1];
-    return section ? `Please log in to access your ${section} details` : 'Please log in';
-  });
-  public $title = computed(() => {
-    const section = this.$params()?.['redirectUrl']?.split('/')[1];
-    return section && section === 'home' ? `Login` : 'Login required';
+    return section
+      ? `Please log in to access your ${section} details`
+      : 'Enter user credentials to log in';
   });
 }

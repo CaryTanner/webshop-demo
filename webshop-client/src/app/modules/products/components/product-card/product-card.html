@@ -2,7 +2,6 @@
   <a
     [attr.aria-label]="'View details for ' + $product()?.name"
     [routerLink]="prodDetailsPath + $product()?.id"
-    [state]="$product()"
   >
     <div class="product-body">
       <img [src]="$product()?.svgType + '.svg'" [alt]="$product()?.svgType + ' icon'" />

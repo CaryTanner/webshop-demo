@@ -1,11 +1,15 @@
 @use 'mixin' as mixin;
 :host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
   .cart-view-container {
     padding-top: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    flex: 1 1 auto;
     div:has(h2) {
       display: flex;
       align-items: center;
@@ -39,6 +43,16 @@
       button {
         @include mixin.cta-button;
       }
+    }
+    .cart-content {
+      flex: 1 1 auto;
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
     }
   }
 }

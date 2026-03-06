@@ -33,19 +33,15 @@ export class ProductDetailsView {
   public $isAdmin = this.authService.$isAdmin;
   private productsService = inject(ProductsService);
   public $productId = signal(Number(this.route.snapshot.paramMap.get('id')));
-  public productFromNavState = this.router.currentNavigation()?.extras?.state as Product; // Product details can be passed via router state when navigating to this view.
-  public $product = toSignal(
-    of(this.productFromNavState).pipe(
-      switchMap((navProd) => {
-        if (navProd && navProd.id === this.$productId()) {
-          return of(navProd);
-        }
-        return this.productsService.getProductById(this.$productId());
-      }),
-    ),
-  );
+  public $product = toSignal(this.productsService.getProductById(this.$productId()));
   public $quantityInCart = computed(() => {
     return this.setQuantityInCart(this.orderService.$cart());
+  });
+  public $disableAddToCart = computed(() => {
+    const product = this.$product();
+    const quantityInCart = this.$quantityInCart();
+    if (!product || !product.stock) return true;
+    return quantityInCart >= product.stock;
   });
 
   addToCart(product: Product) {

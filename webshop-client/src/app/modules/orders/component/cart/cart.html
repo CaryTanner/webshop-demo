@@ -5,9 +5,17 @@
         <app-product-card [$product]="itemsArr.at(idx).get('product')?.value" [$isInCart]="true" />
         <div class="controls-container" [formGroupName]="idx">
           <mat-form-field subscriptSizing="dynamic">
-            <mat-select formControlName="quantity" (selectionChange)="onQuantityChange($event, idx)">
+            <mat-select
+              formControlName="quantity"
+              (selectionChange)="onQuantityChange($event, idx)"
+              [panelWidth]="'fit-content'"
+            >
               @for (num of selectNumbers; track num) {
-                <mat-option [value]="num">{{ num }}</mat-option>
+                <mat-option
+                  [value]="num"
+                  [disabled]="num > itemsArr.at(idx).get('product')?.value?.stock + itemsArr.at(idx).get('quantity')?.value"
+                  >{{ num }}</mat-option
+                >
               }
             </mat-select>
           </mat-form-field>

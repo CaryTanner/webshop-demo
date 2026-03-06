@@ -11,15 +11,19 @@
       <button type="button" matButton="filled" [routerLink]="productsPath">Shop Components</button>
     </div>
   } @else {
-    <app-cart
-      [$items]="$cart()"
-      (quantityChangeEvent)="onQuantityChange($event)"
-      (deleteItemEvent)="onDeleteItem($event)"
-    />
-    <app-item-total
-      [$total]="$cartTotal()"
-      [$tax]="0"
-      [$actionText]="'Proceed to Checkout'"
-      ($actionEmission)="onProceedToCheckout()" />
+    <div class="cart-content">
+      <app-cart
+        [$items]="$cart()"
+        (quantityChangeEvent)="onQuantityChange($event)"
+        (deleteItemEvent)="onDeleteItem($event)"
+      />
+      <app-item-total
+        [$total]="$cartTotal()"
+        [$tax]="0"
+        [$shipping]="0"
+        [$actionText]="'Proceed to checkout'"
+        ($actionEmission)="onProceedToCheckout()"
+      />
+    </div>
   }
 </div>

@@ -1,29 +1,33 @@
 :host {
-  div.title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 2rem;
-  }
-  .scroll-container {
-    display: grid;
-    grid-template-columns: 230px 1fr;
-    gap: 1rem;
-  }
-  .products-list-container {
-    max-height: calc(100vh - 160px);
-    overflow-y: scroll;
-  }
-  @media (max-width: 768px) {
+  .products-view-container {
+    div.title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
     .scroll-container {
-      grid-template-columns: 1fr;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 1rem;
     }
     .products-list-container {
-      max-height: none;
-      overflow: visible;
+      max-height: calc(100vh - 160px);
+      overflow-y: scroll;
     }
-    div.title {
-      margin-bottom: 1rem;
+    @media (max-width: 768px) {
+      .scroll-container {
+        grid-template-columns: 1fr;
+      }
+      .products-list-container {
+        max-height: none;
+        overflow: visible;
+      }
+      div.title {
+        margin-bottom: 1rem;
+      }
     }
   }
 }

@@ -30,11 +30,8 @@
           </div>
           <div class="product-price">
             <span class="price">{{ p.price | currency }}</span>
-            <span
-              class="stock"
-              [class]="{ 'in-stock': p.stock > 0, 'out-of-stock': p.stock === 0 }"
-            >
-              {{ p.stock > 0 ? p.stock + ' in stock' : 'Out of stock' }}
+            <span class="stock" [class]="{ 'out-of-stock': !p.stock }">
+              {{ p.stock ? p.stock + ' in stock' : 'Out of stock' }}
             </span>
           </div>
         </div>
@@ -45,7 +42,12 @@
         <p>{{ p.description || 'No description available.' }}</p>
       </div>
       <div>
-        <button type="button" matButton="filled" (click)="addToCart(p)" [disabled]="p.stock === 0">
+        <button
+          type="button"
+          matButton="filled"
+          (click)="addToCart(p)"
+          [disabled]="$disableAddToCart()"
+        >
           <mat-icon>add_shopping_cart</mat-icon>
           Add to Cart
         </button>

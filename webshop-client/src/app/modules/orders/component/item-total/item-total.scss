@@ -1,7 +1,11 @@
 @use 'mixin' as mixin;
 @use 'theme-colors' as theme;
 :host {
+  width: 100%;
   .item-total-card {
+    background-color: theme.$light-bg;
+    padding: 1rem;
+    border-radius: 8px;
     button {
       @include mixin.cta-button;
       margin-top: 1rem;

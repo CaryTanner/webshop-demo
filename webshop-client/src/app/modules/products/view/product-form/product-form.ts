@@ -132,12 +132,13 @@ export class ProductForm {
   async update() {
     this.$loading.set(true);
     try {
-      await firstValueFrom(
-        this.productsService.updateProduct(Number(this.$productId()), {
-          id: this.$productId(),
-          ...this.form.value,
-        } as Product),
-      );
+      const updated = {
+        id: this.$productId(),
+        ...this.form.value,
+      } as Product;
+      await firstValueFrom(this.productsService.updateProduct(Number(this.$productId()), updated));
+
+      this.router.navigate([ROUTE_PATHS.products['detailsBase'], this.$productId()]);
       this.notificationService.open('Product updated successfully', 'success');
     } finally {
       this.$loading.set(false);

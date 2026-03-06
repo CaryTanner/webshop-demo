@@ -104,7 +104,7 @@ export class Cart {
     userId: null,
     items: this.fb.array([]),
   });
-  public selectNumbers = Array.from({ length: 100 }, (_, i) => i + 1);
+  public selectNumbers = Array.from({ length: 99 }, (_, i) => i + 1);
 
   get itemsArr() {
     return (this.form?.get('items') as FormArray) ?? this.fb.array([]);
