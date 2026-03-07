@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace webshop.api.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20260307144135_OrderItemOrderIdNullable")]
+    partial class OrderItemOrderIdNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -477,11 +480,11 @@ namespace webshop.api.Migrations
 
             modelBuilder.Entity("OrderItem", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
@@ -1090,14 +1093,14 @@ namespace webshop.api.Migrations
                             Id = 1,
                             Email = "admin.one@cgitest.com",
                             IsAdmin = true,
-                            PasswordHash = "$2a$11$RxQphX72zIU7HHMkszsXDebmZNFwsyQ7q17D5fLwNxlHJbcrL4DN2"
+                            PasswordHash = "$2a$11$fG0dxGg.caRtIDxAngqilexr0Mvn4H7LPQQUhhAYZnXXmM.gBWnc2"
                         },
                         new
                         {
                             Id = 2,
                             Email = "not.admin@cgitest.com",
                             IsAdmin = false,
-                            PasswordHash = "$2a$11$PBND9MhHwPdFZrsC4QA2VOz7.ceH2.72MTnrebJsCvZT4p1p93SE."
+                            PasswordHash = "$2a$11$JiWRRVWNzymLN8V9HM1k4.xcGnVZXQC3dYCmONQ7iXwpOtxqZzwUS"
                         });
                 });
 
@@ -1129,9 +1132,7 @@ namespace webshop.api.Migrations
                 {
                     b.HasOne("Order", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("Product", null)
                         .WithMany("OrderItems")

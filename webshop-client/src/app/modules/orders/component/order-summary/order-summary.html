@@ -1,14 +1,48 @@
 @if ($order()) {
-  <h2>Order Summary</h2>
-  <p>Order ID: {{ $order()?.id }}</p>
-  @for (item of $order()?.items; track item.id) {
-    <div class="order-item">
-      <p>Product: {{ item.product.name }}</p>
-      <p>Quantity: {{ item.quantity }}</p>
-      <p>Price: {{ item.unitPrice | currency }}</p>
+  <div class="container">
+    <div class="title">
+      <h2>Order summary</h2>
+      <img src="order_approve.svg" alt="Order summary icon" />
     </div>
-  }
-  <app-products-list [$products]="$products()" />
 
+    @if ($order()?.shipping; as shippingInfo) {
+      <section>
+        <h3>Shipping & Payment information</h3>
+        <div>
+          <strong>Name:</strong>
+          <span>{{ shippingInfo.firstName }} {{ shippingInfo.lastName }}</span>
+        </div>
+        <div>
+          <strong>Address:</strong> <span>{{ shippingInfo.addressLineOne }}</span>
+        </div>
+        <div>
+          <strong>City:</strong> <span>{{ shippingInfo.city }}</span>
+        </div>
+        <div>
+          <strong>Postal code:</strong> <span>{{ shippingInfo.postalCode }}</span>
+        </div>
+        <div>
+          <strong>Country:</strong> <span>{{ shippingInfo.country }}</span>
+        </div>
+        <div class="padding-top">
+          <strong>Shipping method:</strong> <span>{{ shippingInfo.method }}</span>
+        </div>
+        <div class="tracking-number">
+          <strong>Tracking number:</strong>
+          <span>{{ shippingInfo.trackingNumber || 'N/A' }}</span>
+        </div>
+        <div class="padding-top">
+          <strong>Payment method:</strong>
+
+          <span>{{ $order()?.payment?.method | titlecase }}</span>
+        </div>
+      </section>
+    }
+    <h3 class="order-items">Order items</h3>
+
+    @for (item of $products(); track item.id) {
+      <app-product-card [$product]="item" [$isInCart]="true" />
+    }
+  </div>
   <app-item-total [$orderTotal]="$order()?.total || 0" />
 }

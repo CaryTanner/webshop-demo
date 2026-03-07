@@ -147,17 +147,11 @@ public class OrdersController : ControllerBase
         if (id != order.Id)
             return BadRequest();
 
-        // Only logged in users can set status to Pending which is the "fake" version of checking out.
+        // Only logged in users can set status to Pending
         if (order.Status != OrderStatus.Draft)
         {
             if (!User.Identity?.IsAuthenticated ?? true)
                 return Unauthorized();
-        }
-
-        // Remove items with zero quantity
-        if (order.Items != null)
-        {
-            order.Items = order.Items.Where(i => i.Quantity > 0).ToList();
         }
 
         // Fetch existing order from DB
@@ -166,36 +160,61 @@ public class OrdersController : ControllerBase
             .Include(o => o.Payment)
             .Include(o => o.Shipping)
             .FirstOrDefaultAsync(o => o.Id == id);
+
         if (existingOrder == null)
             return NotFound();
 
         // Update scalar properties
         existingOrder.Status = order.Status;
-        existingOrder.ExpiresAt = order.Status == OrderStatus.Draft ? DateTime.UtcNow.AddHours(24) : order.ExpiresAt;
+        existingOrder.UserId = order.UserId;
+        existingOrder.ExpiresAt = order.Status == OrderStatus.Draft
+            ? DateTime.UtcNow.AddHours(24)
+            : order.ExpiresAt;
 
         // Update OrderItems
         if (order.Items != null)
         {
+            // Filter out zero quantity items before processing
+            var validItems = order.Items.Where(i => i.Quantity > 0).ToList();
+
             // Remove items not in new list
-            var itemIds = order.Items.Where(i => i.Id != 0).Select(i => i.Id).ToHashSet();
-            var itemsToRemove = existingOrder.Items.Where(i => !itemIds.Contains(i.Id)).ToList();
+            var incomingIds = validItems
+                .Select(i => i.Id)
+                .ToHashSet();
+
+            var itemsToRemove = existingOrder.Items
+                .Where(i => !incomingIds.Contains(i.Id!.Value))
+                .ToList();
+
             foreach (var item in itemsToRemove)
                 _context.OrderItems.Remove(item);
 
             // Update or add items
-            foreach (var item in order.Items)
+            foreach (var item in validItems)
             {
-                var existingItem = existingOrder.Items.FirstOrDefault(i => i.Id == item.Id);
-                if (existingItem != null)
+                if (item.Id.HasValue)
                 {
-                    existingItem.ProductId = item.ProductId;
-                    existingItem.Quantity = item.Quantity;
-                    existingItem.UnitPrice = item.UnitPrice;
+                    // Update existing item
+                    var existingItem = existingOrder.Items
+                        .FirstOrDefault(i => i.Id == item.Id);
+                    if (existingItem != null)
+                    {
+                        existingItem.ProductId = item.ProductId;
+                        existingItem.Quantity = item.Quantity;
+                        existingItem.UnitPrice = item.UnitPrice;
+                    }
                 }
                 else
                 {
-                    item.OrderId = existingOrder.Id;
-                    _context.OrderItems.Add(item);
+                    // New item
+                    var newItem = new OrderItem
+                    {
+                        OrderId = existingOrder.Id,
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        UnitPrice = item.UnitPrice
+                    };
+                    _context.OrderItems.Add(newItem);
                 }
             }
         }
@@ -236,7 +255,6 @@ public class OrdersController : ControllerBase
                 existingOrder.Shipping.Method = order.Shipping.Method;
                 existingOrder.Shipping.TrackingNumber = order.Shipping.TrackingNumber;
                 existingOrder.Shipping.Country = order.Shipping.Country;
-
             }
         }
 
@@ -251,6 +269,7 @@ public class OrdersController : ControllerBase
             else
                 throw;
         }
+
         return NoContent();
     }
 

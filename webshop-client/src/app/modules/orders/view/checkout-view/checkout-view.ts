@@ -96,42 +96,43 @@ export class CheckoutView implements OnInit {
   async submitOrder() {
     if (this.form.invalid) return;
     console.log('sub order', this.form.value);
+
+    let createdOrder = null;
     this.$loading.set(true);
     try {
       const orderData = {
         ...this.form.value,
         items: this.form.value.orderItems?.items,
       } as Partial<Order>;
-      const orderId = await firstValueFrom(this.orderService.createOrder(orderData));
-      if (!orderId) return;
+      if (!orderData.userId) return;
+
+      createdOrder = await firstValueFrom(this.orderService.createOrder(orderData?.userId));
+      if (!createdOrder?.id) return;
+      await firstValueFrom(this.orderService.updateOrder(createdOrder, orderData));
+      console.log('clear cart');
       //this.orderService.clearCart();
       this.notificationService.open('Order created successfully!');
-      this.router.navigate([ROUTE_PATHS.orders['summaryBase'], orderId]);
-    } catch (err) {
-      this.handleSubmitError(err);
+      this.router.navigate([ROUTE_PATHS.orders['summaryBase'], createdOrder.id]);
+    } catch {
+      this.handleSubmitError(createdOrder?.id);
     } finally {
       this.$loading.set(false);
     }
   }
 
-  async handleSubmitError(err: Error | unknown) {
-    if (!err || !(err instanceof Error)) {
+  async handleSubmitError(orderId: number | undefined) {
+    if (!orderId) {
       this.notificationService.open('Order creation failed. Please try again.');
       return;
     }
 
-    if (err && err instanceof Error) {
-      if (err.message.includes('UPDATE_FAILED')) {
-        const id = err.message.split('UPDATE_FAILED ')[1];
-        try {
-          this.$loading.set(true);
-          await firstValueFrom(this.orderService.deleteOrder(Number(id)));
+    try {
+      this.$loading.set(true);
+      await firstValueFrom(this.orderService.deleteOrder(orderId));
 
-          this.notificationService.open("We couldn't finalize your order, please try again.");
-        } finally {
-          this.$loading.set(false);
-        }
-      }
+      this.notificationService.open("We couldn't finalize your order, please try again.");
+    } finally {
+      this.$loading.set(false);
     }
   }
 

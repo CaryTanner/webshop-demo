@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace webshop.api.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20260307133730_ShippingAddUuidToTrackingNumber")]
+    partial class ShippingAddUuidToTrackingNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -477,7 +480,7 @@ namespace webshop.api.Migrations
 
             modelBuilder.Entity("OrderItem", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -1090,14 +1093,14 @@ namespace webshop.api.Migrations
                             Id = 1,
                             Email = "admin.one@cgitest.com",
                             IsAdmin = true,
-                            PasswordHash = "$2a$11$RxQphX72zIU7HHMkszsXDebmZNFwsyQ7q17D5fLwNxlHJbcrL4DN2"
+                            PasswordHash = "$2a$11$/PkfUuhXjIxVhd5KnawXbutqkw4dfUWZrtSIetAu0UDtR9fwDTCGK"
                         },
                         new
                         {
                             Id = 2,
                             Email = "not.admin@cgitest.com",
                             IsAdmin = false,
-                            PasswordHash = "$2a$11$PBND9MhHwPdFZrsC4QA2VOz7.ceH2.72MTnrebJsCvZT4p1p93SE."
+                            PasswordHash = "$2a$11$aIv2cGetmsmbCVZjIIThreHLPYVs8u0gGwLSRNlTHaWCqlp4tzXjS"
                         });
                 });
 

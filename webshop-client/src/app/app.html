@@ -22,11 +22,19 @@
       [fixedTopGap]="$isMobile() ? 44 : 52"
     >
       <mat-nav-list>
-        <a mat-list-item [routerLink]="routePaths.products['base']" routerLinkActive="active-sidenav"
-          >Products</a
+        <a
+          mat-list-item
+          [routerLink]="routePaths.products['base']"
+          routerLinkActive="active-sidenav"
         >
-        <a mat-list-item [routerLink]="routePaths.authentication['base']" routerLinkActive="active-sidenav"
-          >Account</a
+          Products</a
+        >
+        <a
+          mat-list-item
+          [routerLink]="routePaths.authentication['base']"
+          routerLinkActive="active-sidenav"
+        >
+          Account</a
         >
         <a mat-list-item [routerLink]="routePaths.orders['base']" routerLinkActive="active-sidenav"
           >Orders</a

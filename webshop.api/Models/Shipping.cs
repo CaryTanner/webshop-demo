@@ -1,5 +1,10 @@
 public class Shipping
 {
+    public Shipping()
+    {
+        // Automatically generate a tracking number
+        TrackingNumber = Guid.NewGuid().ToString();
+    }
     public int Id { get; set; }
     public required string LastName { get; set; }
 

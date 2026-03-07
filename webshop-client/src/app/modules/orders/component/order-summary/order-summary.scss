@@ -1,7 +1,63 @@
 @use 'mixin' as mixin;
+@use 'theme-colors' as theme;
 :host {
   box-sizing: border-box;
   padding-bottom: 1rem;
   @include mixin.flex-column-fill();
-  align-items: stretch;
+
+  div.title {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    h2 {
+      margin: 0;
+    }
+  }
+  .container,
+  app-item-total {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    h3 {
+      align-self: center;
+      padding-bottom: 1rem;
+    }
+
+    > div {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.5rem;
+      width: 100%;
+
+      strong {
+        font-weight: 600;
+
+        white-space: nowrap;
+      }
+
+      span,
+      & > *:last-child {
+        text-align: right;
+        word-break: break-word;
+      }
+
+      &.padding-top {
+        padding-top: 0.8rem;
+      }
+    }
+  }
+
+  h3.order-items {
+    text-align: center;
+    padding-top: 2rem;
+    margin-bottom: 0;
+  }
 }

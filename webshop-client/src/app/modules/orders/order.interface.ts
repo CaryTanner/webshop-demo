@@ -67,8 +67,10 @@ export type PaymentStatus = (typeof paymentStatus)[keyof typeof paymentStatus];
 
 export interface Shipping {
   id: number;
-  fullName: string;
-  address: string;
+  firstName: string;
+  lastName: string;
+  addressLineOne: string;
+  addressLineTwo?: string;
   city: string;
   postalCode: string;
   country: string;

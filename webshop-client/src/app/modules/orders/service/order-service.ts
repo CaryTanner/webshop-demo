@@ -4,7 +4,7 @@ import { Product } from '@module/products/product.interface';
 import currencyJs from 'currency.js';
 import { BASE_URL } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, retry, switchMap, throwError } from 'rxjs';
+import { catchError, map, Observable, retry, switchMap, throwError } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private http = inject(HttpClient);
@@ -120,45 +120,27 @@ export class OrderService {
     return this.http.delete<Order>(`${BASE_URL}/orders/${orderId}`);
   }
 
-  updateOrder(
-    savedOrder: Partial<Order>,
-    items: Partial<CartItem>[],
-    shipping: Partial<Shipping>,
-    payment: Partial<Payment>,
-  ) {
-    const orderItemsPayload = items.map((item) => ({
+  updateOrder(createdOrder: Partial<Order>, formValues: Partial<Order>) {
+    const { items, payment, shipping } = formValues;
+    const orderItemsPayload = items?.map((item) => ({
       ...item,
-      orderId: savedOrder.id,
+      orderId: createdOrder.id,
     }));
     return this.http
-      .put<Order>(`${BASE_URL}/orders/${savedOrder.id}`, {
-        ...savedOrder,
+      .put<Order>(`${BASE_URL}/orders/${createdOrder.id}`, {
+        ...createdOrder,
         items: orderItemsPayload,
-        payment: { ...payment, orderId: savedOrder.id },
-        shipping: { ...shipping, orderId: savedOrder.id },
+        payment: { ...payment, orderId: createdOrder.id },
+        shipping: { ...shipping, orderId: createdOrder.id },
       })
       .pipe(
         retry(1),
-        map(() => savedOrder.id),
-        catchError(() => throwError(() => new Error('UPDATE_FAILED ' + savedOrder.id))),
+        map(() => createdOrder.id),
       );
   }
 
-  createOrder(orderData: Partial<Order>) {
-    const { userId, items, payment, shipping } = orderData;
-    if (!userId || !items?.length || !payment || !shipping) {
-      throw new Error('Missing required order data');
-    }
-    return this.http.post<Order>(`${BASE_URL}/orders`, { userId }).pipe(
-      switchMap((savedOrder) => {
-        if (!savedOrder?.id) {
-          return throwError(() => new Error('CREATION_FAILED'));
-        }
-        return this.updateOrder(savedOrder, items, shipping, payment);
-      }),
-      catchError(() => {
-        return throwError(() => new Error('CREATION_FAILED'));
-      }),
-    );
+  createOrder(userId: number): Observable<Partial<Order>> | Observable<never> {
+    if (!userId) return throwError(() => new Error('USER_ID_MISSING'));
+    return this.http.post<Partial<Order>>(`${BASE_URL}/orders`, { userId });
   }
 }

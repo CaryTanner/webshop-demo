@@ -59,6 +59,7 @@ export class Cart {
   addAndPatchItem(item: CartItem) {
     this.itemsArr?.push(
       this.fb.group({
+        id: null, // orderItem.id has to be null or 0 to update with all items on create/update
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         productId: item.productId,
