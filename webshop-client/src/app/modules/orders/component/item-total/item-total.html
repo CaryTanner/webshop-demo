@@ -2,7 +2,11 @@
   <div class="totals-row" aria-live="polite" aria-atomic="true">
     <div>
       <span>Subtotal</span>
-      <span>{{ $cartTotal() | number: '1.2-2' }}</span>
+      @if ($orderTotal()) {
+        <span>{{ $orderTotal() | number: '1.2-2' }}</span>
+      } @else {
+        <span>{{ $cartTotal() | number: '1.2-2' }}</span>
+      }
     </div>
     <div>
       <span>Tax</span>
@@ -18,7 +22,11 @@
     </div>
     <div>
       <span>Total</span>
-      <span>{{ $cartTotal() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
+      @if ($orderTotal()) {
+        <span>{{ $orderTotal() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
+      } @else {
+        <span>{{ $cartTotal() | currency: 'USD' : 'symbol' : '1.2-2' }}</span>
+      }
     </div>
   </div>
   <ng-content> </ng-content>

@@ -17,6 +17,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { firstValueFrom, map, of } from 'rxjs';
 import { Order, PaymentMethod, ShippingMethod } from '@module/orders/order.interface';
 import { AuthenticationService } from '@module/authentication/service/authentication-service';
+import { NotificationService } from '@common/services/notification/notification.service';
+import { Router } from '@angular/router';
+import { R } from '@angular/cdk/keycodes';
+import { ROUTE_PATHS } from 'src/app/app.routes';
 
 @Component({
   selector: 'app-checkout-view',
@@ -34,6 +38,8 @@ import { AuthenticationService } from '@module/authentication/service/authentica
 })
 export class CheckoutView implements OnInit {
   private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
   public euCountries = inject(EU_COUNTRIES);
   private orderService = inject(OrderService);
   private authService = inject(AuthenticationService);
@@ -96,11 +102,36 @@ export class CheckoutView implements OnInit {
         ...this.form.value,
         items: this.form.value.orderItems?.items,
       } as Partial<Order>;
-      await firstValueFrom(this.orderService.createOrder(orderData));
-    } catch (_err) {
-      console.log('order submission failed', _err);
+      const orderId = await firstValueFrom(this.orderService.createOrder(orderData));
+      if (!orderId) return;
+      //this.orderService.clearCart();
+      this.notificationService.open('Order created successfully!');
+      this.router.navigate([ROUTE_PATHS.orders['summaryBase'], orderId]);
+    } catch (err) {
+      this.handleSubmitError(err);
     } finally {
       this.$loading.set(false);
+    }
+  }
+
+  async handleSubmitError(err: Error | unknown) {
+    if (!err || !(err instanceof Error)) {
+      this.notificationService.open('Order creation failed. Please try again.');
+      return;
+    }
+
+    if (err && err instanceof Error) {
+      if (err.message.includes('UPDATE_FAILED')) {
+        const id = err.message.split('UPDATE_FAILED ')[1];
+        try {
+          this.$loading.set(true);
+          await firstValueFrom(this.orderService.deleteOrder(Number(id)));
+
+          this.notificationService.open("We couldn't finalize your order, please try again.");
+        } finally {
+          this.$loading.set(false);
+        }
+      }
     }
   }
 

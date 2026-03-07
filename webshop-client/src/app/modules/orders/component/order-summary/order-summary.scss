@@ -1,0 +1,7 @@
+@use 'mixin' as mixin;
+:host {
+  box-sizing: border-box;
+  padding-bottom: 1rem;
+  @include mixin.flex-column-fill();
+  align-items: stretch;
+}

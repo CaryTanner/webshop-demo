@@ -4,7 +4,7 @@ import { Product } from '@module/products/product.interface';
 import currencyJs from 'currency.js';
 import { BASE_URL } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { of, retry, switchMap, tap, throwError } from 'rxjs';
+import { catchError, map, retry, switchMap, throwError } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private http = inject(HttpClient);
@@ -112,6 +112,14 @@ export class OrderService {
     this._cart.set([]);
   }
 
+  getOrder(orderId: number) {
+    return this.http.get<Order>(`${BASE_URL}/orders/${orderId}`);
+  }
+
+  deleteOrder(orderId: number) {
+    return this.http.delete<Order>(`${BASE_URL}/orders/${orderId}`);
+  }
+
   updateOrder(
     savedOrder: Partial<Order>,
     items: Partial<CartItem>[],
@@ -129,7 +137,11 @@ export class OrderService {
         payment: { ...payment, orderId: savedOrder.id },
         shipping: { ...shipping, orderId: savedOrder.id },
       })
-      .pipe(retry(1));
+      .pipe(
+        retry(1),
+        map(() => savedOrder.id),
+        catchError(() => throwError(() => new Error('UPDATE_FAILED ' + savedOrder.id))),
+      );
   }
 
   createOrder(orderData: Partial<Order>) {
@@ -140,9 +152,12 @@ export class OrderService {
     return this.http.post<Order>(`${BASE_URL}/orders`, { userId }).pipe(
       switchMap((savedOrder) => {
         if (!savedOrder?.id) {
-          return throwError(() => new Error('Order creation failed, no order ID returned'));
+          return throwError(() => new Error('CREATION_FAILED'));
         }
         return this.updateOrder(savedOrder, items, shipping, payment);
+      }),
+      catchError(() => {
+        return throwError(() => new Error('CREATION_FAILED'));
       }),
     );
   }

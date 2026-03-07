@@ -31,7 +31,11 @@ export const routes: Routes = [
         component: CheckoutView,
         canActivate: [authGuard, itemsGuard],
       },
-      { path: ordersRoutePaths.summary, component: OrderSummary, canActivate: [authGuard] },
+      {
+        path: `${ordersRoutePaths.summaryBase}:id`,
+        component: OrderSummary,
+        canActivate: [authGuard],
+      },
     ],
   },
 ];

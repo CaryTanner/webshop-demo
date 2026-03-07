@@ -1,1 +1,14 @@
-<p>order-summary works!</p>
+@if ($order()) {
+  <h2>Order Summary</h2>
+  <p>Order ID: {{ $order()?.id }}</p>
+  @for (item of $order()?.items; track item.id) {
+    <div class="order-item">
+      <p>Product: {{ item.product.name }}</p>
+      <p>Quantity: {{ item.quantity }}</p>
+      <p>Price: {{ item.unitPrice | currency }}</p>
+    </div>
+  }
+  <app-products-list [$products]="$products()" />
+
+  <app-item-total [$orderTotal]="$order()?.total || 0" />
+}

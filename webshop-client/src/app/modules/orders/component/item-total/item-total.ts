@@ -1,5 +1,5 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { OrderService } from '@module/orders/service/order-service';
 
 @Component({
@@ -12,6 +12,7 @@ import { OrderService } from '@module/orders/service/order-service';
 export class ItemTotal {
   private orderService = inject(OrderService);
   public $cartTotal = this.orderService.$cartTotal;
+  public $orderTotal = input<number>(0);
   $tax = signal<number>(0);
   $shipping = signal<number | string>(0);
 }
