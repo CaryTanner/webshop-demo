@@ -28,7 +28,8 @@ export class OrderSummary {
   public $orderId = signal(Number(this.route.snapshot.paramMap.get('id')));
   public $order: Signal<Order | undefined> = toSignal(this.orderService.getOrder(this.$orderId()));
   public $products = computed(() => {
-    console.log(' handle order not belong to user or order not found');
     return this.$order()?.items.map((item) => item.product) || [];
   });
+
+  // handle order not belong to user or order not found
 }

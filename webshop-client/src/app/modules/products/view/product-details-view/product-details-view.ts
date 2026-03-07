@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute,  RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { NotificationService } from '@common/services/notification/notification.service';
 import { AuthenticationService } from '@module/authentication/service/authentication-service';
 import { CartItem } from '@module/orders/order.interface';

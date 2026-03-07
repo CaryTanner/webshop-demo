@@ -1,10 +1,10 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { CartItem, CartStorage, Order, Payment, Shipping } from '../order.interface';
+import { CartItem, CartStorage, Order } from '../order.interface';
 import { Product } from '@module/products/product.interface';
 import currencyJs from 'currency.js';
 import { BASE_URL } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, Observable, retry, switchMap, throwError } from 'rxjs';
+import { map, Observable, retry, throwError } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private http = inject(HttpClient);
