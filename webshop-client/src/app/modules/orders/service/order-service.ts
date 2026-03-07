@@ -1,10 +1,10 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { CartItem, CartStorage, Order } from '../order.interface';
+import { CartItem, CartStorage, Order, Payment, Shipping } from '../order.interface';
 import { Product } from '@module/products/product.interface';
 import currencyJs from 'currency.js';
 import { BASE_URL } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { of, switchMap, tap } from 'rxjs';
+import { of, retry, switchMap, tap, throwError } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private http = inject(HttpClient);
@@ -112,6 +112,26 @@ export class OrderService {
     this._cart.set([]);
   }
 
+  updateOrder(
+    savedOrder: Partial<Order>,
+    items: Partial<CartItem>[],
+    shipping: Partial<Shipping>,
+    payment: Partial<Payment>,
+  ) {
+    const orderItemsPayload = items.map((item) => ({
+      ...item,
+      orderId: savedOrder.id,
+    }));
+    return this.http
+      .put<Order>(`${BASE_URL}/orders/${savedOrder.id}`, {
+        ...savedOrder,
+        items: orderItemsPayload,
+        payment: { ...payment, orderId: savedOrder.id },
+        shipping: { ...shipping, orderId: savedOrder.id },
+      })
+      .pipe(retry(1));
+  }
+
   createOrder(orderData: Partial<Order>) {
     const { userId, items, payment, shipping } = orderData;
     if (!userId || !items?.length || !payment || !shipping) {
@@ -119,22 +139,11 @@ export class OrderService {
     }
     return this.http.post<Order>(`${BASE_URL}/orders`, { userId }).pipe(
       switchMap((savedOrder) => {
-        console.log('order saved, now processing payment', savedOrder);
         if (!savedOrder?.id) {
-          throw new Error('Order creation failed');
+          return throwError(() => new Error('Order creation failed, no order ID returned'));
         }
-        const orderItemsPayload = items.map((item) => ({
-          ...item,
-          orderId: savedOrder.id,
-        }));
-        return this.http.put<Order>(`${BASE_URL}/orders/${savedOrder.id}`, {
-          ...savedOrder,
-          items: orderItemsPayload,
-          payment: { ...payment, orderId: savedOrder.id },
-          shipping: { ...shipping, orderId: savedOrder.id },
-        });
+        return this.updateOrder(savedOrder, items, shipping, payment);
       }),
-      tap((x) => console.log('payment processed, order complete', x)),
     );
   }
 }
