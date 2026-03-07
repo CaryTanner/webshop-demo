@@ -1,5 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  model,
+  OnInit,
+  signal,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { EU_COUNTRIES } from '@common/injection-tokens';
@@ -7,17 +20,10 @@ import { PaymentForm } from '@module/orders/component/payment-form/payment-form'
 import { ReviewItems } from '@module/orders/component/review-items/review-items';
 import { ShippingForm } from '@module/orders/component/shipping-form/shipping-form';
 import { OrderService } from '@module/orders/service/order-service';
-import { ConfirmOrder } from '@module/orders/component/confirm-order/confirm-order';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const checkoutSteps = {
-  items: 'items',
-  shipping: 'shipping',
-  payment: 'payment',
-  confirm: 'confirm',
-} as const;
-
-export type CheckoutStep = (typeof checkoutSteps)[keyof typeof checkoutSteps];
+import { toSignal } from '@angular/core/rxjs-interop';
+import { firstValueFrom, map, of } from 'rxjs';
+import { Order, PaymentMethod, ShippingMethod } from '@module/orders/order.interface';
+import { AuthenticationService } from '@module/authentication/service/authentication-service';
 
 @Component({
   selector: 'app-checkout-view',
@@ -28,53 +34,91 @@ export type CheckoutStep = (typeof checkoutSteps)[keyof typeof checkoutSteps];
     ShippingForm,
     PaymentForm,
     MatTabsModule,
-    ConfirmOrder,
   ],
   templateUrl: './checkout-view.html',
   styleUrl: './checkout-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckoutView {
+export class CheckoutView implements OnInit {
   private fb = inject(FormBuilder);
   public euCountries = inject(EU_COUNTRIES);
   private orderService = inject(OrderService);
+  private authService = inject(AuthenticationService);
   public $cart = this.orderService.$cart;
   private sweden = this.euCountries.find((c) => c === 'Sweden');
-  public paymentMethods = ['Klarna', 'Stripe', 'PayPal'];
-  public shippingMethods = ['PostNord', 'DHL', 'Bring'];
-  public STEPS: CheckoutStep[] = ['items', 'shipping', 'payment', 'confirm'];
-
+  public paymentMethods: PaymentMethod[] = ['card', 'klarna'];
+  public shippingMethods: ShippingMethod[] = ['PostNord', 'DHL', 'Bring'];
+  public $selectedMatTabIndex = model(0);
   public form = this.buildForm();
-  public $currentStep = signal<CheckoutStep>('items');
-  public $completedSteps = signal<Set<CheckoutStep>>(new Set());
-  public $canViewShipping = computed(() => {
-    return this.$completedSteps().has('items');
-  });
-  public $canViewPayment = computed(() => {
-    return this.$completedSteps().has('shipping');
-  });
-  public $canViewConfirm = computed(() => {
-    return this.$completedSteps().has('payment');
-  });
+  public $isShippingFormValid = toSignal(
+    this.form?.get('shipping')?.statusChanges.pipe(
+      map((value: 'VALID' | 'INVALID' | 'PENDING' | 'DISABLED') => {
+        return value === 'VALID';
+      }),
+    ) ?? of(false),
+    {
+      initialValue: false,
+    },
+  );
+  public $loading = signal(false);
+
+  ngOnInit() {
+    // set on init to have access to control list
+    const countryControl = this.form.get('shipping')?.get('country');
+    if (countryControl) {
+      countryControl.setValidators([this.countryInfoObjectValidator.bind(this)]);
+      countryControl.updateValueAndValidity();
+    }
+  }
 
   buildForm() {
     return this.fb.group({
-      userId: null,
+      userId: this.authService.$user()?.userId,
       orderItems: this.fb.group({
         items: this.fb.array([]),
       }),
       payment: this.fb.group({
         method: [this.paymentMethods[0]],
-        paymentOnDelivery: [false],
+        stripePaymentIntentId: ['test_intent_id'],
       }),
       shipping: this.fb.group({
-        fullName: ['', Validators.required],
-        address: ['', Validators.required],
-        city: ['', Validators.required],
-        postalCode: ['', Validators.required],
-        country: [this.sweden, Validators.required],
+        firstName: ['first_name_Test', Validators.required],
+        lastName: ['last_name_Test', Validators.required],
+        addressLineOne: ['address_line_one_Test', Validators.required],
+        addressLineTwo: ['address_line_two_Test'],
+        city: ['city_Test', Validators.required],
+        postalCode: ['postal_code_Test', Validators.required],
+        country: [this.sweden],
         method: [this.shippingMethods[0]],
       }),
     });
+  }
+
+  async submitOrder() {
+    if (this.form.invalid) return;
+    console.log('sub order', this.form.value);
+    this.$loading.set(true);
+    try {
+      const orderData = {
+        ...this.form.value,
+        items: this.form.value.orderItems?.items,
+      } as Partial<Order>;
+      await firstValueFrom(this.orderService.createOrder(orderData));
+    } catch (_err) {
+      console.log('order submission failed', _err);
+    } finally {
+      this.$loading.set(false);
+    }
+  }
+
+  countryInfoObjectValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+
+    if (value && this.euCountries.some((country) => country === value)) {
+      control.setErrors(null);
+      return null;
+    }
+    control.setErrors({ countryInfoInvalid: true });
+    return { countryInfoInvalid: true };
   }
 }

@@ -3,7 +3,7 @@
 :host {
   height: 100%;
   box-sizing: border-box;
-  padding: 2rem 0;
+  padding: 2rem 0 1rem 0;
   @include mixin.flex-column-fill();
   form {
     @include mixin.flex-column-fill();
@@ -11,10 +11,10 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      .mat-mdc-checkbox {
-        align-self: center;
-      }
     }
+  }
+  .submitting {
+    opacity: 0.8;
   }
 
   button.cta-button {

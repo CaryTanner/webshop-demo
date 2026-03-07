@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-confirm-order',
+  selector: 'app-order-summary',
   imports: [],
-  templateUrl: './confirm-order.html',
-  styleUrl: './confirm-order.scss',
+  templateUrl: './order-summary.html',
+  styleUrl: './order-summary.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmOrder {
+export class OrderSummary {
 
 }

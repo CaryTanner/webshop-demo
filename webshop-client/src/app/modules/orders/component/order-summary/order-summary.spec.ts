@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmOrder } from './confirm-order';
+import { OrderSummary } from './order-summary';
 
-describe('ConfirmOrder', () => {
-  let component: ConfirmOrder;
-  let fixture: ComponentFixture<ConfirmOrder>;
+describe('OrderSummary', () => {
+  let component: OrderSummary;
+  let fixture: ComponentFixture<OrderSummary>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmOrder]
+      imports: [OrderSummary]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmOrder);
+    fixture = TestBed.createComponent(OrderSummary);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

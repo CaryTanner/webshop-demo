@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace webshop.api.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20260307101211_AddCountryInfoTable")]
+    partial class AddCountryInfoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -447,6 +450,189 @@ namespace webshop.api.Migrations
                         {
                             CategoriesId = 4,
                             ProductsId = 50
+                        });
+                });
+
+            modelBuilder.Entity("CountryInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CountryName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CountryInfos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CountryCode = "AT",
+                            CountryName = "Austria"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CountryCode = "BE",
+                            CountryName = "Belgium"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CountryCode = "BG",
+                            CountryName = "Bulgaria"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CountryCode = "HR",
+                            CountryName = "Croatia"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CountryCode = "CY",
+                            CountryName = "Cyprus"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CountryCode = "CZ",
+                            CountryName = "Czech Republic"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CountryCode = "DK",
+                            CountryName = "Denmark"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CountryCode = "EE",
+                            CountryName = "Estonia"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CountryCode = "FI",
+                            CountryName = "Finland"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CountryCode = "FR",
+                            CountryName = "France"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CountryCode = "DE",
+                            CountryName = "Germany"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CountryCode = "GR",
+                            CountryName = "Greece"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CountryCode = "HU",
+                            CountryName = "Hungary"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CountryCode = "IE",
+                            CountryName = "Ireland"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CountryCode = "IT",
+                            CountryName = "Italy"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CountryCode = "LV",
+                            CountryName = "Latvia"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CountryCode = "LT",
+                            CountryName = "Lithuania"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CountryCode = "LU",
+                            CountryName = "Luxembourg"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CountryCode = "MT",
+                            CountryName = "Malta"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CountryCode = "NL",
+                            CountryName = "Netherlands"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CountryCode = "PL",
+                            CountryName = "Poland"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CountryCode = "PT",
+                            CountryName = "Portugal"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CountryCode = "RO",
+                            CountryName = "Romania"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CountryCode = "SK",
+                            CountryName = "Slovakia"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CountryCode = "SI",
+                            CountryName = "Slovenia"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CountryCode = "ES",
+                            CountryName = "Spain"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CountryCode = "SE",
+                            CountryName = "Sweden"
                         });
                 });
 
@@ -1030,9 +1216,8 @@ namespace webshop.api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CountryInfoId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -1056,6 +1241,8 @@ namespace webshop.api.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryInfoId");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
@@ -1090,14 +1277,14 @@ namespace webshop.api.Migrations
                             Id = 1,
                             Email = "admin.one@cgitest.com",
                             IsAdmin = true,
-                            PasswordHash = "$2a$11$ESqmeIwWCPFFNPoQ81wCzONa2RR6h9wskRhYpBWaunsyz08/h9Dcq"
+                            PasswordHash = "$2a$11$ZLZdaFu/XoYoboZfHwl0KObXyZ9aweWv2SE6ll7wWFkMvsszfKHzC"
                         },
                         new
                         {
                             Id = 2,
                             Email = "not.admin@cgitest.com",
                             IsAdmin = false,
-                            PasswordHash = "$2a$11$twm1XXW9JJScF5HtNXNNTOvL/1N1icGnymR9fieEbJ3zS2fYN.zzO"
+                            PasswordHash = "$2a$11$UNB0kZAo841m2RwR5oEzi.g996jL2Em5UsnSiTzP.3FTsUsmKJZVq"
                         });
                 });
 
@@ -1151,11 +1338,19 @@ namespace webshop.api.Migrations
 
             modelBuilder.Entity("Shipping", b =>
                 {
+                    b.HasOne("CountryInfo", "CountryInfo")
+                        .WithMany()
+                        .HasForeignKey("CountryInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Order", null)
                         .WithOne("Shipping")
                         .HasForeignKey("Shipping", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CountryInfo");
                 });
 
             modelBuilder.Entity("Order", b =>

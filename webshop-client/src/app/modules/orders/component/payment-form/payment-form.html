@@ -11,16 +11,26 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox formControlName="paymentOnDelivery">Payment on delivery</mat-checkbox>
+    <mat-form-field>
+      <mat-label>Intent ID</mat-label>
+      <input matInput formControlName="stripePaymentIntentId" required />
+      @if ($form().get('stripePaymentIntentId')?.hasError('required')) {
+        <mat-error>Intent id required</mat-error>
+      }
+    </mat-form-field>
   </div>
-
-  <button
-    matButton="filled"
-    class="cta-button"
-    type="submit"
-    (click)="submitEmission.emit()"
-    [disabled]="!$form().valid"
-  >
-    Proceed to shipping
-  </button>
+  @if ($submitDisabled()) {
+    <mat-spinner aria-label="Processing your order"></mat-spinner>
+  }
+  <app-item-total [class.submitting]="$submitDisabled()">
+    <button
+      matButton="filled"
+      class="cta-button"
+      type="submit"
+      (click)="submitEmission.emit()"
+      [disabled]="!$form().valid || $submitDisabled()"
+    >
+      Confirm order
+    </button>
+  </app-item-total>
 </form>

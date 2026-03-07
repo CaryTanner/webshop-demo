@@ -47,18 +47,23 @@ export interface Payment {
   orderId: number;
 }
 
-export enum PaymentMethod {
-  Klarna = 'Klarna',
-  Stripe = 'Stripe',
-  PayPal = 'PayPal',
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const paymentMethods = {
+  klarna: 'klarna',
+  card: 'card',
+} as const;
 
-export enum PaymentStatus {
-  Pending = 'Pending',
-  Completed = 'Completed',
-  Failed = 'Failed',
-  Refunded = 'Refunded',
-}
+export type PaymentMethod = (typeof paymentMethods)[keyof typeof paymentMethods];
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const paymentStatus = {
+  Pending: 'Pending',
+  Completed: 'Completed',
+  Failed: 'Failed',
+  Refunded: 'Refunded',
+} as const;
+
+export type PaymentStatus = (typeof paymentStatus)[keyof typeof paymentStatus];
 
 export interface Shipping {
   id: number;
@@ -72,8 +77,11 @@ export interface Shipping {
   orderId: number;
 }
 
-export enum ShippingMethod {
-  PostNord = 'PostNord',
-  DHL = 'DHL',
-  Bring = 'Bring',
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const shippingMethod = {
+  PostNord: 'PostNord',
+  DHL: 'DHL',
+  Bring: 'Bring',
+} as const;
+
+export type ShippingMethod = (typeof shippingMethod)[keyof typeof shippingMethod];

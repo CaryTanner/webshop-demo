@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { CartItem, OrderItem } from '@module/orders/order.interface';
+import { CartItem } from '@module/orders/order.interface';
 import { ProductCard } from '@module/products/components/product-card/product-card';
 
 @Component({
@@ -32,7 +32,7 @@ export class Cart {
   });
   // can accept a parent component form if provided
   public $form = input(this.defaultForm);
-  $items = input<CartItem[] | OrderItem[]>();
+  $items = input<CartItem[]>();
   deleteItemEvent = output<number>();
   quantityChangeEvent = output<{ productId: number; quantity: number }>();
 
@@ -56,13 +56,11 @@ export class Cart {
     });
   }
 
-  addAndPatchItem(item: CartItem | OrderItem) {
+  addAndPatchItem(item: CartItem) {
     this.itemsArr?.push(
       this.fb.group({
-        id: 'id' in item ? (item as OrderItem).id : null,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
-        orderId: 'orderId' in item ? (item as OrderItem).orderId : null,
         productId: item.productId,
         product: item.product,
       }),

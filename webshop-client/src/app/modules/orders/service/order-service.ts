@@ -1,9 +1,13 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
-import { CartItem, CartStorage } from '../order.interface';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { CartItem, CartStorage, Order } from '../order.interface';
 import { Product } from '@module/products/product.interface';
 import currencyJs from 'currency.js';
+import { BASE_URL } from '@env/environment';
+import { HttpClient } from '@angular/common/http';
+import { of, switchMap, tap } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
+  private http = inject(HttpClient);
   private _cart = signal<CartItem[]>([]);
   public $cart = this._cart.asReadonly();
   public $numberCartItems = computed(() => {
@@ -106,5 +110,31 @@ export class OrderService {
 
   clearCart() {
     this._cart.set([]);
+  }
+
+  createOrder(orderData: Partial<Order>) {
+    const { userId, items, payment, shipping } = orderData;
+    if (!userId || !items?.length || !payment || !shipping) {
+      throw new Error('Missing required order data');
+    }
+    return this.http.post<Order>(`${BASE_URL}/orders`, { userId }).pipe(
+      switchMap((savedOrder) => {
+        console.log('order saved, now processing payment', savedOrder);
+        if (!savedOrder?.id) {
+          throw new Error('Order creation failed');
+        }
+        const orderItemsPayload = items.map((item) => ({
+          ...item,
+          orderId: savedOrder.id,
+        }));
+        return this.http.put<Order>(`${BASE_URL}/orders/${savedOrder.id}`, {
+          ...savedOrder,
+          items: orderItemsPayload,
+          payment: { ...payment, orderId: savedOrder.id },
+          shipping: { ...shipping, orderId: savedOrder.id },
+        });
+      }),
+      tap((x) => console.log('payment processed, order complete', x)),
+    );
   }
 }

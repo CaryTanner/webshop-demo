@@ -38,6 +38,7 @@ public class OrdersController : ControllerBase
                 o.ExpiresAt,
                 o.Status,
                 o.UserId,
+                o.Total,
                 User = o.User == null ? null : new { o.User.Id, o.User.Email },
                 Items = o.Items.Select(i => new { i.Id, i.ProductId, i.Quantity, i.UnitPrice })
             })
@@ -47,7 +48,7 @@ public class OrdersController : ControllerBase
 
     // GET: api/orders/5 (populate all properties)
     [HttpGet("{id}")]
-    public async Task<ActionResult<Order>> GetOrder(int id)
+    public async Task<ActionResult<object>> GetOrder(int id)
     {
         var now = DateTime.UtcNow;
         var order = await _context.Orders
@@ -56,11 +57,75 @@ public class OrdersController : ControllerBase
             .Include(o => o.Payment)
             .Include(o => o.Shipping)
             .FirstOrDefaultAsync(o => o.Id == id);
+
         if (order == null)
             return NotFound();
         if (order.Status == OrderStatus.Draft && order.CreatedAt < now.AddHours(-24))
             return NotFound();
-        return order;
+
+        // Restrict access: only owner or admin
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var isAdmin = User.Claims.FirstOrDefault(c => c.Type == "IsAdmin")?.Value;
+        bool isOwner = userIdClaim != null && int.TryParse(userIdClaim, out int userId) && order.UserId == userId;
+        bool isAdminUser = isAdmin == "True" || isAdmin == "true";
+
+        if (!isOwner && !isAdminUser)
+            return Unauthorized();
+
+        // Populate Product for each OrderItem
+        var productIds = order.Items.Select(i => i.ProductId).ToList();
+        var products = await _context.Products
+            .Include(p => p.Categories)
+            .Where(p => productIds.Contains(p.Id))
+            .ToListAsync();
+
+        return Ok(new
+        {
+            order.Id,
+            order.CreatedAt,
+            order.ExpiresAt,
+            Status = order.Status.ToString(),
+            order.UserId,
+            order.Total,
+            User = order.User == null ? null : new { order.User.Id, order.User.Email },
+            Items = order.Items.Select(i => new
+            {
+                i.Id,
+                i.ProductId,
+                i.Quantity,
+                i.UnitPrice,
+                Product = products.FirstOrDefault(p => p.Id == i.ProductId) == null ? null : new
+                {
+                    Id = i.ProductId,
+                    Name = products.FirstOrDefault(p => p.Id == i.ProductId)?.Name,
+                    Description = products.FirstOrDefault(p => p.Id == i.ProductId)?.Description,
+                    Price = products.FirstOrDefault(p => p.Id == i.ProductId)?.Price,
+                    Stock = products.FirstOrDefault(p => p.Id == i.ProductId)?.Stock,
+                    SvgType = products.FirstOrDefault(p => p.Id == i.ProductId)?.SvgType,
+                    Categories = products.FirstOrDefault(p => p.Id == i.ProductId)?.Categories.Select(c => new { c.Id, c.Name })
+                }
+            }),
+            Payment = order.Payment == null ? null : new
+            {
+                order.Payment.Id,
+                Method = order.Payment.Method.ToString(),
+                Status = order.Payment.Status.ToString(),
+                order.Payment.PaidAt,
+            },
+            Shipping = order.Shipping == null ? null : new
+            {
+                order.Shipping.Id,
+                order.Shipping.FirstName,
+                order.Shipping.LastName,
+                order.Shipping.AddressLineOne,
+                order.Shipping.AddressLineTwo,
+                order.Shipping.City,
+                order.Shipping.PostalCode,
+                order.Shipping.Country,
+                order.Shipping.TrackingNumber,
+                Method = order.Shipping.Method.ToString()
+            },
+        });
     }
 
     // POST: api/orders
@@ -92,21 +157,89 @@ public class OrdersController : ControllerBase
         // Remove items with zero quantity
         if (order.Items != null)
         {
-            var itemsToRemove = order.Items.Where(i => i.Quantity == 0).ToList();
-            foreach (var item in itemsToRemove)
-            {
-                _context.OrderItems.Remove(item);
-            }
             order.Items = order.Items.Where(i => i.Quantity > 0).ToList();
         }
 
-        // Reset ExpiresAt if order is still Draft
-        if (order.Status == OrderStatus.Draft)
+        // Fetch existing order from DB
+        var existingOrder = await _context.Orders
+            .Include(o => o.Items)
+            .Include(o => o.Payment)
+            .Include(o => o.Shipping)
+            .FirstOrDefaultAsync(o => o.Id == id);
+        if (existingOrder == null)
+            return NotFound();
+
+        // Update scalar properties
+        existingOrder.Status = order.Status;
+        existingOrder.ExpiresAt = order.Status == OrderStatus.Draft ? DateTime.UtcNow.AddHours(24) : order.ExpiresAt;
+
+        // Update OrderItems
+        if (order.Items != null)
         {
-            order.ExpiresAt = DateTime.UtcNow.AddHours(24);
+            // Remove items not in new list
+            var itemIds = order.Items.Where(i => i.Id != 0).Select(i => i.Id).ToHashSet();
+            var itemsToRemove = existingOrder.Items.Where(i => !itemIds.Contains(i.Id)).ToList();
+            foreach (var item in itemsToRemove)
+                _context.OrderItems.Remove(item);
+
+            // Update or add items
+            foreach (var item in order.Items)
+            {
+                var existingItem = existingOrder.Items.FirstOrDefault(i => i.Id == item.Id);
+                if (existingItem != null)
+                {
+                    existingItem.ProductId = item.ProductId;
+                    existingItem.Quantity = item.Quantity;
+                    existingItem.UnitPrice = item.UnitPrice;
+                }
+                else
+                {
+                    item.OrderId = existingOrder.Id;
+                    _context.OrderItems.Add(item);
+                }
+            }
         }
 
-        _context.Entry(order).State = EntityState.Modified;
+        // Update Payment
+        if (order.Payment != null)
+        {
+            if (existingOrder.Payment == null)
+            {
+                order.Payment.OrderId = existingOrder.Id;
+                _context.Payments.Add(order.Payment);
+            }
+            else
+            {
+                existingOrder.Payment.Method = order.Payment.Method;
+                existingOrder.Payment.Status = order.Payment.Status;
+                existingOrder.Payment.PaidAt = order.Payment.PaidAt;
+                existingOrder.Payment.StripePaymentIntentId = order.Payment.StripePaymentIntentId;
+            }
+        }
+
+        // Update Shipping
+        if (order.Shipping != null)
+        {
+            if (existingOrder.Shipping == null)
+            {
+                order.Shipping.OrderId = existingOrder.Id;
+                _context.Shippings.Add(order.Shipping);
+            }
+            else
+            {
+                existingOrder.Shipping.FirstName = order.Shipping.FirstName;
+                existingOrder.Shipping.LastName = order.Shipping.LastName;
+                existingOrder.Shipping.AddressLineOne = order.Shipping.AddressLineOne;
+                existingOrder.Shipping.AddressLineTwo = order.Shipping.AddressLineTwo;
+                existingOrder.Shipping.City = order.Shipping.City;
+                existingOrder.Shipping.PostalCode = order.Shipping.PostalCode;
+                existingOrder.Shipping.Method = order.Shipping.Method;
+                existingOrder.Shipping.TrackingNumber = order.Shipping.TrackingNumber;
+                existingOrder.Shipping.Country = order.Shipping.Country;
+
+            }
+        }
+
         try
         {
             await _context.SaveChangesAsync();

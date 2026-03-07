@@ -30,6 +30,7 @@ export const ordersRoutePaths = {
   base: ordersBase,
   cart: 'cart',
   checkout: 'checkout',
+  summary: 'summary',
 };
 
 // Route definitions use relative paths, but components need absolute paths.

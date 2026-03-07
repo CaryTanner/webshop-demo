@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace webshop.api.Migrations
 {
     [DbContext(typeof(WebshopContext))]
-    partial class WebshopContextModelSnapshot : ModelSnapshot
+    [Migration("20260307063536_ProductAddMaxLength")]
+    partial class ProductAddMaxLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -1090,14 +1093,14 @@ namespace webshop.api.Migrations
                             Id = 1,
                             Email = "admin.one@cgitest.com",
                             IsAdmin = true,
-                            PasswordHash = "$2a$11$ESqmeIwWCPFFNPoQ81wCzONa2RR6h9wskRhYpBWaunsyz08/h9Dcq"
+                            PasswordHash = "$2a$11$1ZgH7ZYnidiR1zyqQJvDk.r6jSHmNuzhkyxLnS.ZksKjtcVTBy8C."
                         },
                         new
                         {
                             Id = 2,
                             Email = "not.admin@cgitest.com",
                             IsAdmin = false,
-                            PasswordHash = "$2a$11$twm1XXW9JJScF5HtNXNNTOvL/1N1icGnymR9fieEbJ3zS2fYN.zzO"
+                            PasswordHash = "$2a$11$VGTUMhLNxvxZO0FdSIGh3eYiiWeRW0HYYOG.7wdT49X2nDwMHtWyS"
                         });
                 });
 
@@ -1127,35 +1130,43 @@ namespace webshop.api.Migrations
 
             modelBuilder.Entity("OrderItem", b =>
                 {
-                    b.HasOne("Order", null)
+                    b.HasOne("Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Product", null)
+                    b.HasOne("Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Payment", b =>
                 {
-                    b.HasOne("Order", null)
+                    b.HasOne("Order", "Order")
                         .WithOne("Payment")
                         .HasForeignKey("Payment", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Shipping", b =>
                 {
-                    b.HasOne("Order", null)
+                    b.HasOne("Order", "Order")
                         .WithOne("Shipping")
                         .HasForeignKey("Shipping", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Order", b =>

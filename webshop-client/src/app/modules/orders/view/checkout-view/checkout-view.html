@@ -3,10 +3,14 @@
   <mat-icon>shopping_cart_checkout</mat-icon>
 </div>
 
-<mat-tab-group [animationDuration]="'0ms'" fitInkBarToContent>
+<mat-tab-group [animationDuration]="'0ms'" [(selectedIndex)]="$selectedMatTabIndex">
   <mat-tab label="Review items">
     <ng-template matTabContent>
-      <app-review-items [$items]="$cart()" [$form]="form.controls.orderItems" />
+      <app-review-items
+        [$items]="$cart()"
+        [$form]="form.controls.orderItems"
+        (submitEmission)="$selectedMatTabIndex.set(1)"
+      />
     </ng-template>
   </mat-tab>
   <mat-tab label="Shipping">
@@ -15,16 +19,18 @@
         [$countries]="euCountries"
         [$methods]="shippingMethods"
         [$form]="form.controls.shipping"
+        (submitEmission)="$selectedMatTabIndex.set(2)"
       />
     </ng-template>
   </mat-tab>
-  <mat-tab label="Payment">
+  <mat-tab label="Payment" [disabled]="!$isShippingFormValid()">
     <ng-template matTabContent>
-      <app-payment-form [$methods]="paymentMethods" [$form]="form.controls.payment" />
+      <app-payment-form
+        [$methods]="paymentMethods"
+        [$form]="form.controls.payment"
+        [$submitDisabled]="$loading()"
+        (submitEmission)="submitOrder()"
+      />
     </ng-template>
   </mat-tab>
 </mat-tab-group>
-
-@if ($canViewConfirm()) {
-  <app-confirm-order />
-}

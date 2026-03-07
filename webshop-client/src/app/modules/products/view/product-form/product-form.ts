@@ -62,7 +62,7 @@ export class ProductForm {
   categories = inject(PRODUCT_CATEGORIES);
 
   form = this.fb.group({
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.maxLength(250)]],
     description: ['', [Validators.maxLength(500)]],
     price: [0, [Validators.required, Validators.min(0)]],
     stock: [0, [Validators.required, Validators.min(0)]],
