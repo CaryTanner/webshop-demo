@@ -25,7 +25,11 @@
       "@env/*": [
         "environment"
       ]
-    }
+    },
+     "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": ["node"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
