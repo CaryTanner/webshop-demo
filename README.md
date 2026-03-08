@@ -176,11 +176,12 @@ Two users are created automatically when you run `dotnet ef database update`:
 |---|---|---|
 | `/products` | Product catalogue | No |
 | `/products/:id` | Product detail | No |
-| `/orders/cart` | Shopping cart | Yes Yes (login required) |
+| `/orders/cart` | Shopping cart | No |
 | `/orders/checkout` | Checkout flow | Yes (login required) |
 | `/products/manage/**` | Admin product management | Yes (admin only) |
 | `/login` | Login | No |
 | `/home` | Hero | No |
+| `/account` | User info | Yes (login required) |
 
 ---
 
