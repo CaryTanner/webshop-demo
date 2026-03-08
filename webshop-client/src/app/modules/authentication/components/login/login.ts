@@ -34,8 +34,8 @@ export class Login {
   });
   $loading = model(false);
   loginForm: FormGroup = this.fb.group({
-    email: ['admin.one@cgitest.com', [Validators.required, Validators.email]],
-    password: ['admin123', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   async onSubmit() {

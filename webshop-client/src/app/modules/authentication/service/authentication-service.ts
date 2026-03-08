@@ -71,7 +71,6 @@ export class AuthenticationService {
   login({ email, password }: { email: string; password: string }) {
     return this.http.post<LoginResponse>(`${BASE_URL}/auth/login`, { email, password }).pipe(
       map((resp: LoginResponse) => {
-        console.log('login response', resp);
         if (!resp.token) {
           throw new Error('Login failed');
         }
@@ -96,17 +95,5 @@ export class AuthenticationService {
     localStorage.removeItem('token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user');
-  }
-
-  testJwt() {
-    return this.http.get(`${BASE_URL}/orders`).pipe(
-      map((resp) => {
-        console.log('test JWT response', resp);
-        return of(true);
-      }),
-      catchError((err) => {
-        return throwError(() => err);
-      }),
-    );
   }
 }

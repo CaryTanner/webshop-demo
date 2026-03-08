@@ -9,7 +9,7 @@
       <div>
         <h2>{{ $product()?.name }}</h2>
         <div class="product-price">
-          <span>{{ $product()?.price | currency }}</span>
+          <span>{{ $product()?.price | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
         </div>
       </div>
     </div>

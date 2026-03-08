@@ -1,25 +1,7 @@
 <form [formGroup]="$form()">
-  <div>
-    <mat-form-field>
-      <mat-label>Payment method</mat-label>
-      <mat-select formControlName="method" required>
-        @for (method of $methods(); track method) {
-          <mat-option [value]="method">
-            {{ method }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+  <div #paymentElement class="payment-element"></div>
 
-    <mat-form-field>
-      <mat-label>Intent ID</mat-label>
-      <input matInput formControlName="stripePaymentIntentId" required />
-      @if ($form().get('stripePaymentIntentId')?.hasError('required')) {
-        <mat-error>Intent id required</mat-error>
-      }
-    </mat-form-field>
-  </div>
-  @if ($submitDisabled()) {
+  @if ($submitDisabled() || $stripeLoading()) {
     <mat-spinner aria-label="Processing your order"></mat-spinner>
   }
   <app-item-total [class.submitting]="$submitDisabled()">
@@ -27,8 +9,8 @@
       matButton="filled"
       class="cta-button"
       type="submit"
-      (click)="submitEmission.emit()"
-      [disabled]="!$form().valid || $submitDisabled()"
+      (click)="confirmPayment()"
+      [disabled]="$submitDisabled() || !$paymentInputComplete() || $stripeLoading()"
     >
       Confirm order
     </button>

@@ -179,7 +179,8 @@ public class OrdersController : ControllerBase
 
             // Remove items not in new list
             var incomingIds = validItems
-                .Select(i => i.Id)
+                .Where(i => i.Id.HasValue)
+                .Select(i => i.Id!.Value)
                 .ToHashSet();
 
             var itemsToRemove = existingOrder.Items

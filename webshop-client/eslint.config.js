@@ -3,8 +3,6 @@ const eslint = require("@eslint/js");
 const { defineConfig } = require("eslint/config");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
-const eslintConfigPrettier = require('eslint-config-prettier');
-const prettierPlugin = require("eslint-plugin-prettier/recommended");
 
 module.exports = defineConfig([
   {
@@ -14,8 +12,6 @@ module.exports = defineConfig([
       tseslint.configs.recommended,
       tseslint.configs.stylistic,
       angular.configs.tsRecommended,
-      eslintConfigPrettier,
-      prettierPlugin,
     ],
     processor: angular.processInlineTemplates,
     rules: {
@@ -55,9 +51,6 @@ module.exports = defineConfig([
       angular.configs.templateRecommended,
       angular.configs.templateAccessibility,
     ],
-    rules: {
-      '@angular-eslint/template/button-has-type': 'warn',
-      '@angular-eslint/template/eqeqeq': 'error',
-    },
+    rules: {},
   }
 ]);

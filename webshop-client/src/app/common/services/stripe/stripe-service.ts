@@ -1,67 +1,30 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { BASE_URL } from '@env/environment';
+import { Observable } from 'rxjs';
+import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { OrderService } from '@module/orders/service/order-service';
+import { PaymentIntentResponse } from '@module/orders/order.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StripeService {
-  // private stripePromise: Promise<Stripe | null> | null = null;
+  private stripePromise: Promise<Stripe | null> | null = null;
+  private http = inject(HttpClient);
+  private orderService = inject(OrderService);
 
-  // constructor(private http: HttpClient) {}
+  getStripePromise(stripePublicKey: string) {
+    if (!this.stripePromise) {
+      this.stripePromise = loadStripe(stripePublicKey);
+    }
+    return this.stripePromise;
+  }
 
-  // getStripePromise() {
-  //   if (!this.stripePromise) {
-  //     this.stripePromise = loadStripe(environment.stripe_pk);
-  //   }
-  //   return this.stripePromise;
-  // }
-
-  // createSetupIntent(
-  //   token: string,
-  //   body: { regNo: string; email: string; country: string; postalCode: string; vatNumber: string },
-  // ): Observable<{ clientSecret: string; customerId: string }> {
-  //   return this.http
-  //     .post(`${environment.base_url}/signup/create-setup-intent`, body, {
-  //       headers: {
-  //         Authorization: token,
-  //       },
-  //     })
-  //     .pipe(
-  //       map((response: ProxyResponse<{ data: string; statusCode: number }>) => {
-  //         if (response?.data?.statusCode !== 200 || !response?.data?.data) {
-  //           throw new Error('Stripe service - create setup intent failed');
-  //         }
-
-  //         const { clientSecret, customerId } = JSON.parse(response.data.data);
-
-  //         return { clientSecret, customerId };
-  //       }),
-  //     );
-  // }
-
-  // updateCustomerDefaultPaymentMethod(
-  //   token: string,
-  //   regNo: string,
-  //   customerId: string,
-  //   paymentMethodId: PaymentMethod | string,
-  // ): Observable<StripeCustomer> {
-  //   return this.http
-  //     .post(
-  //       `${environment.base_url}/signup/set-default-payment-method`,
-  //       { regNo, customerId, paymentMethodId },
-  //       {
-  //         headers: {
-  //           Authorization: token,
-  //         },
-  //       },
-  //     )
-  //     .pipe(
-  //       map((response: ProxyResponse<{ data: string; statusCode: number }>) => {
-  //         if (response?.data?.statusCode !== 200 || !response?.data?.data) {
-  //           throw new Error('Stripe service - set default payment method failed');
-  //         }
-
-  //         return JSON.parse(response.data.data);
-  //       }),
-  //     );
-  // }
+  createPaymentIntent(): Observable<PaymentIntentResponse> {
+    const amount = this.orderService.$cartTotal();
+    return this.http.post<PaymentIntentResponse>(`${BASE_URL}/payments/create-payment-intent`, {
+      amount,
+    });
+  }
 }

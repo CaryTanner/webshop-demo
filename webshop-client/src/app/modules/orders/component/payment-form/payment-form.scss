@@ -7,14 +7,9 @@
   @include mixin.flex-column-fill();
   form {
     @include mixin.flex-column-fill();
-    div:has(mat-form-field) {
+    .payment-element {
       width: 100%;
-      display: flex;
-      flex-direction: column;
     }
-  }
-  .submitting {
-    opacity: 0.8;
   }
 
   button.cta-button {

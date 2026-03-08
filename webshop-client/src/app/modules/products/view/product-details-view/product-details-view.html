@@ -31,7 +31,7 @@
             }
           </div>
           <div class="product-price">
-            <span class="price">{{ p.price | currency }}</span>
+            <span class="price">{{ p.price | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
             <span class="stock" [class]="{ 'out-of-stock': !p.stock }">
               {{ p.stock ? p.stock + ' in stock' : 'Out of stock' }}
             </span>

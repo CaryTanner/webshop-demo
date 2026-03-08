@@ -208,14 +208,14 @@ public class WebshopContext : DbContext
             new User
             {
                 Id = 1,
-                Email = "admin.one@cgitest.com",
+                Email = "admin@email.com",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
                 IsAdmin = true
             },
             new User
             {
                 Id = 2,
-                Email = "not.admin@cgitest.com",
+                Email = "not.admin@email.com",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("notAdmin123"),
                 IsAdmin = false
             }

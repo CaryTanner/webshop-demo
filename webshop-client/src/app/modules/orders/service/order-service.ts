@@ -129,6 +129,7 @@ export class OrderService {
     return this.http
       .put<Order>(`${BASE_URL}/orders/${createdOrder.id}`, {
         ...createdOrder,
+        status: 'Pending',
         items: orderItemsPayload,
         payment: { ...payment, orderId: createdOrder.id },
         shipping: { ...shipping, orderId: createdOrder.id },

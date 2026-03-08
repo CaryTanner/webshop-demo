@@ -87,3 +87,9 @@ const shippingMethod = {
 } as const;
 
 export type ShippingMethod = (typeof shippingMethod)[keyof typeof shippingMethod];
+
+export interface PaymentIntentResponse {
+  clientSecret: string;
+  paymentIntentId: string;
+  publishableKey: string;
+}

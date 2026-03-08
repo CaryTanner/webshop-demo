@@ -19,7 +19,6 @@ import { Order, PaymentMethod, ShippingMethod } from '@module/orders/order.inter
 import { AuthenticationService } from '@module/authentication/service/authentication-service';
 import { NotificationService } from '@common/services/notification/notification.service';
 import { Router } from '@angular/router';
-import { R } from '@angular/cdk/keycodes';
 import { ROUTE_PATHS } from 'src/app/app.routes';
 
 @Component({
@@ -78,15 +77,15 @@ export class CheckoutView implements OnInit {
       }),
       payment: this.fb.group({
         method: [this.paymentMethods[0]],
-        stripePaymentIntentId: ['test_intent_id'],
+        stripePaymentIntentId: [''],
       }),
       shipping: this.fb.group({
-        firstName: ['first_name_Test', Validators.required],
-        lastName: ['last_name_Test', Validators.required],
-        addressLineOne: ['address_line_one_Test', Validators.required],
-        addressLineTwo: ['address_line_two_Test'],
-        city: ['city_Test', Validators.required],
-        postalCode: ['postal_code_Test', Validators.required],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        addressLineOne: ['', Validators.required],
+        addressLineTwo: [''],
+        city: ['', Validators.required],
+        postalCode: ['', Validators.required],
         country: [this.sweden],
         method: [this.shippingMethods[0]],
       }),
@@ -95,7 +94,6 @@ export class CheckoutView implements OnInit {
 
   async submitOrder() {
     if (this.form.invalid) return;
-    console.log('sub order', this.form.value);
 
     let createdOrder = null;
     this.$loading.set(true);
@@ -109,8 +107,7 @@ export class CheckoutView implements OnInit {
       createdOrder = await firstValueFrom(this.orderService.createOrder(orderData?.userId));
       if (!createdOrder?.id) return;
       await firstValueFrom(this.orderService.updateOrder(createdOrder, orderData));
-      console.log('clear cart');
-      //this.orderService.clearCart();
+      this.orderService.clearCart();
       this.notificationService.open('Order created successfully!');
       this.router.navigate([ROUTE_PATHS.orders['summaryBase'], createdOrder.id]);
     } catch {
