@@ -42,9 +42,9 @@ export class OrderService {
     }
 
     const savedAt = new Date(cartStorage.savedAt);
-    const daysSinceSaved = (Date.now() - savedAt.getTime()) / (1000 * 60 * 60 * 24);
+    const daysSinceSaved = (Date.now() - savedAt.getTime()) / (1000 * 60 * 60 * 24); // elapsed time in days
 
-    if (daysSinceSaved > 30) {
+    if (daysSinceSaved > 7) {
       localStorage.removeItem(this.CART_KEY);
       return;
     }
